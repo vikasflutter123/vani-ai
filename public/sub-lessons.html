@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Learning Path</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+
+        body{
+          font-family:'Inter',sans-serif;
+          background:linear-gradient(135deg,#ffffff,#f3e8ff,#fde2f3);
+          color:#0f172a;
+          min-height:100vh;
+        }
+
+        /* HEADER */
+        .header{
+          max-width:1200px;
+          margin:auto;
+          padding:40px 20px 20px;
+        }
+        .header h1{
+          font-size:42px;
+          font-weight:800;
+        }
+        .header h1 span{
+          color:#8b5cf6;
+          font-style:italic;
+        }
+        .header p{
+          color:#64748b;
+          margin-top:6px;
+          font-size:18px;
+        }
+
+        /* CONTAINER */
+        .container{
+          max-width:1200px;
+          margin:auto;
+          padding:0 20px 60px;
+        }
+
+        /* GRID */
+        .path{
+          display:grid;
+          grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+          gap:28px;
+        }
+
+        /* CARD BASE */
+        .card{
+          position:relative;
+          border-radius:24px;
+          padding:26px;
+          background:#fff;
+          border:1px solid #e5e7eb;
+          display:flex;
+          flex-direction:column;
+          justify-content:space-between;
+        }
+
+        /* BADGE */
+        .badge{
+          font-size:11px;
+          font-weight:800;
+          padding:5px 12px;
+          border-radius:999px;
+          display:inline-block;
+          width:max-content;
+        }
+        .badge.done{background:#3b82f6;color:#fff}
+        .badge.active{background:#f97316;color:#fff}
+        .badge.locked{background:#e5e7eb;color:#64748b}
+
+        /* DONE */
+        .card.done{
+          background:#eef2ff;
+          border-color:#c7d2fe;
+        }
+        .completed{
+          margin-top:14px;
+          font-size:14px;
+          color:#2563eb;
+          font-weight:600;
+          display:flex;
+          gap:6px;
+          align-items:center;
+        }
+
+        /* ACTIVE */
+        .card.active{
+          background:#fff7ed;
+          border-color:#fed7aa;
+          box-shadow:0 20px 40px rgba(249,115,22,.25);
+          transform:scale(1.03);
+        }
+        .progress-ring{
+          position:absolute;
+          top:22px;
+          right:22px;
+          width:56px;
+          height:56px;
+          border-radius:50%;
+          border:5px solid #f97316;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          font-size:13px;
+          font-weight:800;
+          color:#f97316;
+        }
+
+        /* LOCKED */
+        .card.locked{
+          background:#f1f5f9;
+          opacity:.6;
+        }
+        .lock{
+          position:absolute;
+          top:22px;
+          right:22px;
+          font-size:20px;
+        }
+
+        /* TEXT */
+        .card h3{
+          font-size:20px;
+          margin-top:16px;
+          font-weight:700;
+        }
+        .card p{
+          font-size:14px;
+          color:#64748b;
+          margin:10px 0 20px;
+          line-height:1.5;
+        }
+
+        /* BUTTON */
+        .card button{
+          margin-top:auto;
+          width:100%;
+          border:none;
+          padding:16px;
+          border-radius:16px;
+          font-weight:800;
+          font-size:15px;
+          background:#f97316;
+          color:#fff;
+          cursor:pointer;
+        }
+        .card button:hover{
+          background:#ea580c;
+        }
+
+        /* FOOTER */
+        .footer{
+          margin-top:50px;
+          background:#fff;
+          padding:26px;
+          border-radius:22px;
+          display:flex;
+          align-items:center;
+          gap:18px;
+          border:1px solid #e5e7eb;
+        }
+        .progress-bar{
+          flex:1;
+          height:10px;
+          background:#e5e7eb;
+          border-radius:999px;
+          overflow:hidden;
+        }
+        .progress{
+          height:100%;
+          width:0%;
+          background:linear-gradient(90deg,#8b5cf6,#c084fc);
+          border-radius:999px;
+        }
+
+        /* HINT */
+        .hint{
+          margin-top:28px;
+          text-align:center;
+          color:#94a3b8;
+          font-size:14px;
+        }
+
+        /* MOBILE */
+        @media(max-width:900px){
+          .card.active{transform:none}
+          .header h1{font-size:34px}
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="header">
+    <h1>Your <span>Learning</span> Path</h1>
+    <p id="lessonTitle">Unit</p>
+</div>
+
+<div class="container">
+
+    <div class="path" id="subLessons"></div>
+
+    <div class="footer">
+        🏆 <b>Unit Progress</b>
+        <div class="progress-bar">
+            <div class="progress" id="unitProgress"></div>
+        </div>
+        <b id="progressText">0%</b>
+    </div>
+
+    <div class="hint">
+        Keep going to unlock <b>Unit 2: Daily Routines</b> →
+    </div>
+
+</div>
+
+<script>
+    const token = localStorage.getItem('token');
+    const lessonId = localStorage.getItem('lessonId');
+    const title = localStorage.getItem('lessonTitle');
+
+    if(!token){
+      location.href='login.html';
+    }
+
+    document.getElementById('lessonTitle').innerText = title || 'Unit 1';
+
+    fetch(`/api/auth/lessons/${lessonId}/sub-lessons`,{
+      headers:{ Authorization:`Bearer ${token}` }
+    })
+    .then(res=>res.json())
+    .then(renderLessons)
+    .catch(()=>alert('Failed to load lessons'));
+
+    function renderLessons(data){
+      const box = document.getElementById('subLessons');
+      box.innerHTML='';
+
+      let activeIndex = data.findIndex(l=>!l.completed);
+      if(activeIndex === -1) activeIndex = data.length - 1;
+
+      data.forEach((l,i)=>{
+        let cls='locked', badge='LOCKED', extra='', action='';
+
+        if(l.completed){
+          cls='done';
+          badge='DONE';
+          extra=`<div class="completed">✓ Completed</div>`;
+        }
+
+        if(i === activeIndex){
+          cls='active';
+          badge='ACTIVE';
+          const percent = Math.round((i / data.length) * 100);
+          extra=`<div class="progress-ring">${percent}%</div>`;
+          action=`<button onclick="startLesson('${l.title}')">▶ Continue Learning</button>`;
+        }
+
+        if(cls === 'locked'){
+          extra=`<div class="lock">🔒</div>`;
+        }
+
+        box.innerHTML += `
+          <div class="card ${cls}">
+            <span class="badge ${cls}">${badge}</span>
+            ${extra}
+            <h3>${l.title}</h3>
+            <p>${l.description || 'Practice your English skills'}</p>
+            ${action}
+          </div>
+        `;
+      });
+
+      const completed = data.filter(d=>d.completed).length;
+      const percent = Math.round((completed / data.length) * 100);
+      document.getElementById('unitProgress').style.width = percent+'%';
+      document.getElementById('progressText').innerText = percent+'%';
+    }
+
+    function startLesson(title){
+      localStorage.setItem('chatMode','lesson');
+      localStorage.setItem('chatContext',title);
+      location.href='chat.html';
+    }
+</script>
+
+</body>
+</html>

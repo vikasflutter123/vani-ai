@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Assessment Result</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+          --primary:#5b6cff;
+          --secondary:#ff6a88;
+        }
+
+        body {
+          font-family:'Inter',sans-serif;
+          background:linear-gradient(135deg,#f3e7ff,#eef3ff);
+          min-height:100vh;
+          display:flex;
+          justify-content:center;
+          align-items:center;
+        }
+
+        .card {
+          background:#fff;
+          width:100%;
+          max-width:420px;
+          padding:32px;
+          border-radius:28px;
+          box-shadow:0 30px 80px rgba(0,0,0,0.12);
+          text-align:center;
+        }
+
+        .badge {
+          display:inline-flex;
+          align-items:center;
+          gap:8px;
+          padding:6px 14px;
+          background:#e9fff3;
+          color:#1cbf73;
+          border-radius:999px;
+          font-size:13px;
+          font-weight:600;
+        }
+
+        .progress {
+          width:180px;
+          height:180px;
+          border-radius:50%;
+          background:conic-gradient(var(--primary) var(--deg), #e8ecff 0);
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          margin:24px auto;
+        }
+
+        .progress-inner {
+          width:130px;
+          height:130px;
+          background:#fff;
+          border-radius:50%;
+          display:flex;
+          flex-direction:column;
+          justify-content:center;
+        }
+
+        .level {
+          font-size:38px;
+          font-weight:700;
+          color:var(--primary);
+        }
+
+        .label {
+          font-size:13px;
+          color:#777;
+        }
+
+        h2 {
+          margin:8px 0;
+          font-size:22px;
+        }
+
+        p {
+          font-size:14px;
+          color:#666;
+          line-height:1.5;
+        }
+
+        .stats {
+          display:flex;
+          justify-content:space-between;
+          margin:22px 0;
+          font-weight:600;
+        }
+
+        .stats span {
+          background:#f5f7ff;
+          padding:10px 16px;
+          border-radius:12px;
+          font-size:14px;
+        }
+
+        .btn {
+          width:100%;
+          padding:16px;
+          border:none;
+          border-radius:999px;
+          font-size:16px;
+          font-weight:600;
+          color:#fff;
+          background:linear-gradient(135deg,var(--secondary),var(--primary));
+          cursor:pointer;
+        }
+
+        .retry {
+          margin-top:16px;
+          font-size:14px;
+          color:#888;
+          cursor:pointer;
+        }
+        .retry:hover { text-decoration:underline; }
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+    <div class="badge">✔ Analysis Complete</div>
+
+    <div class="progress">
+        <div class="progress-inner">
+            <div class="level" id="level">A1</div>
+            <div class="label" id="label">Beginner</div>
+        </div>
+    </div>
+
+    <h2 id="title">Beginner A1</h2>
+    <p id="desc">
+        Great start! We’ve customized your learning path based on your performance.
+    </p>
+
+    <div class="stats">
+        <span>✅ Correct: <b id="correct">0</b></span>
+        <span>❌ Wrong: <b id="wrong">0</b></span>
+    </div>
+
+    <button class="btn" onclick="start()">Start Learning</button>
+    <div class="retry" onclick="retake()">Retake Assessment</div>
+</div>
+
+<script>
+    const raw = localStorage.getItem('result');
+    if (!raw) location.href='home.html';
+
+    const result = JSON.parse(raw);
+
+    const level = result.level || 'A1';
+    const label = result.label || 'Beginner';
+    const percent = Math.round((result.correct / result.total) * 100);
+
+    document.documentElement.style.setProperty('--deg', percent * 3.6 + 'deg');
+
+    levelEl = document.getElementById('level');
+    labelEl = document.getElementById('label');
+
+    levelEl.innerText = level;
+    labelEl.innerText = label;
+
+    document.getElementById('title').innerText = `${label} ${level}`;
+    document.getElementById('correct').innerText = result.correct;
+    document.getElementById('wrong').innerText = result.wrong;
+
+    function start(){
+      localStorage.removeItem('result');
+      location.href='home.html';
+    }
+
+    /**
+     * ✅ IMPORTANT PART
+     * Retake = go back to QUICK TEST
+     * overwrite old assessment automatically
+     */
+    function retake(){
+      localStorage.removeItem('result'); // remove old submission
+      localStorage.setItem('retake','true');
+      location.href='quick-test.html';
+    }
+</script>
+
+</body>
+</html>

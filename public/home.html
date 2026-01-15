@@ -1,0 +1,969 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Home | Vāṇī</title>-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+
+<!--    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">-->
+
+<!--    <style>-->
+<!--        *{margin:0;padding:0;box-sizing:border-box}-->
+<!--        body{-->
+<!--          font-family:'Inter',sans-serif;-->
+<!--          background:#f7f8fc;-->
+<!--          color:#111827;-->
+<!--        }-->
+
+<!--        /* NAVBAR */-->
+<!--        .navbar{-->
+<!--          display:flex;-->
+<!--          justify-content:space-between;-->
+<!--          align-items:center;-->
+<!--          padding:16px 24px;-->
+<!--          background:#fff;-->
+<!--        }-->
+<!--        .logo{-->
+<!--          font-weight:800;-->
+<!--          font-size:18px;-->
+<!--          color:#7c3aed;-->
+<!--        }-->
+<!--        .nav-links{-->
+<!--          display:flex;-->
+<!--          gap:24px;-->
+<!--          font-size:14px;-->
+<!--          color:#6b7280;-->
+<!--        }-->
+<!--        .profile{-->
+<!--          display:flex;-->
+<!--          align-items:center;-->
+<!--          gap:10px;-->
+<!--          font-size:13px;-->
+<!--        }-->
+<!--        .avatar{-->
+<!--          width:32px;height:32px;-->
+<!--          border-radius:50%;-->
+<!--          background:#e5e7eb;-->
+<!--          display:flex;-->
+<!--          align-items:center;-->
+<!--          justify-content:center;-->
+<!--          font-weight:700;-->
+<!--        }-->
+
+<!--        /* HERO */-->
+<!--        .hero{-->
+<!--          text-align:center;-->
+<!--          margin:40px 0 28px;-->
+<!--        }-->
+<!--        .hero h1{-->
+<!--          font-size:36px;-->
+<!--          font-weight:800;-->
+<!--        }-->
+<!--        .hero h1 span{-->
+<!--          color:#7c3aed;-->
+<!--          font-style:italic;-->
+<!--        }-->
+
+<!--        /* TOGGLE */-->
+<!--        .toggle{-->
+<!--          display:inline-flex;-->
+<!--          background:#e5e7eb;-->
+<!--          border-radius:999px;-->
+<!--          padding:4px;-->
+<!--          margin-top:18px;-->
+<!--        }-->
+<!--        .toggle button{-->
+<!--          border:none;-->
+<!--          padding:8px 18px;-->
+<!--          border-radius:999px;-->
+<!--          cursor:pointer;-->
+<!--          background:transparent;-->
+<!--          font-weight:600;-->
+<!--        }-->
+<!--        .toggle button.active{-->
+<!--          background:#fff;-->
+<!--          box-shadow:0 4px 12px rgba(0,0,0,.1);-->
+<!--        }-->
+
+<!--        /* GRID */-->
+<!--        .container{-->
+<!--          max-width:1100px;-->
+<!--          margin:auto;-->
+<!--          padding:0 20px 40px;-->
+<!--        }-->
+<!--        .grid{-->
+<!--          display:grid;-->
+<!--          grid-template-columns:repeat(auto-fit,minmax(250px,1fr));-->
+<!--          gap:20px;-->
+<!--        }-->
+
+<!--        /* CARD */-->
+<!--        .card{-->
+<!--          border-radius:18px;-->
+<!--          padding:18px;-->
+<!--          cursor:pointer;-->
+<!--          transition:.2s;-->
+<!--        }-->
+<!--        .card:hover{transform:translateY(-4px)}-->
+<!--        .card h4{font-size:16px;font-weight:700}-->
+<!--        .card p{font-size:13px;color:#555;margin-top:6px}-->
+<!--        .stars{color:#fbbf24;margin-top:10px}-->
+
+<!--        /* COLORS */-->
+<!--        .c1{background:#e0e7ff}-->
+<!--        .c2{background:#fff7ed}-->
+<!--        .c3{background:#fce7f3}-->
+<!--        .c4{background:#ecfeff}-->
+<!--        .c5{background:#f5f3ff}-->
+<!--        .c6{background:#ecfdf5}-->
+
+<!--        /* MOBILE */-->
+<!--        @media(max-width:640px){-->
+<!--          .nav-links{display:none}-->
+<!--          .hero h1{font-size:28px}-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+
+<!--<body>-->
+
+<!--&lt;!&ndash; NAVBAR &ndash;&gt;-->
+<!--<div class="navbar">-->
+<!--    <div class="logo">🟣 Vāṇī</div>-->
+
+<!--    <div class="nav-links">-->
+<!--        <span>Lessons</span>-->
+<!--        <span>Practice</span>-->
+<!--        <span>Community</span>-->
+<!--    </div>-->
+
+<!--    <div class="profile">-->
+<!--        <span id="username">User</span>-->
+<!--        <div class="avatar" id="avatar">U</div>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--&lt;!&ndash; HERO &ndash;&gt;-->
+<!--<div class="hero">-->
+<!--    <h1>Improve <span>English</span><br>every day</h1>-->
+
+<!--    <div class="toggle">-->
+<!--        <button id="practiceBtn" class="active">Practice</button>-->
+<!--        <button id="lessonBtn">Lessons</button>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--&lt;!&ndash; CONTENT &ndash;&gt;-->
+<!--<div class="container">-->
+<!--    <div class="grid" id="content"></div>-->
+<!--</div>-->
+
+<!--<script>-->
+<!--    /* ================= AUTH ================= */-->
+<!--    const token = localStorage.getItem('token');-->
+<!--    const name  = localStorage.getItem('name') || 'User';-->
+
+<!--    if(!token) location.href='login.html';-->
+
+<!--    username.innerText = name;-->
+<!--    avatar.innerText = name[0].toUpperCase();-->
+
+<!--    /* ================= LOAD PRACTICE ================= */-->
+<!--    function loadPractice(){-->
+<!--      setActive(practiceBtn);-->
+<!--      fetch('/api/auth/categories',{-->
+<!--        headers:{Authorization:`Bearer ${token}`}-->
+<!--      })-->
+<!--      .then(r=>r.json())-->
+<!--      .then(data=>{-->
+<!--        renderCards(data,'practice');-->
+<!--      });-->
+<!--    }-->
+
+<!--    /* ================= LOAD LESSONS ================= */-->
+<!--    function loadLessons(){-->
+<!--      setActive(lessonBtn);-->
+<!--      fetch('/api/auth/lesson-categories',{-->
+<!--        headers:{Authorization:`Bearer ${token}`}-->
+<!--      })-->
+<!--      .then(r=>r.json())-->
+<!--      .then(data=>{-->
+<!--        renderCards(data,'lesson');-->
+<!--      });-->
+<!--    }-->
+
+<!--    /* ================= RENDER ================= */-->
+<!--    function renderCards(data,type){-->
+<!--      const grid = document.getElementById('content');-->
+<!--      grid.innerHTML='';-->
+<!--      const colors=['c1','c2','c3','c4','c5','c6'];-->
+
+<!--      data.forEach((item,i)=>{-->
+<!--        grid.innerHTML += `-->
+<!--          <div class="card ${colors[i%6]}"-->
+<!--               onclick="${type==='practice'-->
+<!--                 ? `openChat('${item.name}')`-->
+<!--                 : `openLessons(${item.id},'${item.title}')`}">-->
+<!--            <h4>${item.name || item.title}</h4>-->
+<!--            <p>${item.description}</p>-->
+<!--            <div class="stars">★★★★★</div>-->
+<!--          </div>-->
+<!--        `;-->
+<!--      });-->
+<!--    }-->
+
+<!--    /* ================= TOGGLE ================= */-->
+<!--    function setActive(btn){-->
+<!--      practiceBtn.classList.remove('active');-->
+<!--      lessonBtn.classList.remove('active');-->
+<!--      btn.classList.add('active');-->
+<!--    }-->
+
+<!--    practiceBtn.onclick = loadPractice;-->
+<!--    lessonBtn.onclick = loadLessons;-->
+
+<!--    /* ================= NAVIGATION ================= */-->
+<!--    function openChat(name){-->
+<!--      localStorage.setItem('chatMode','category');-->
+<!--      localStorage.setItem('chatContext',name);-->
+<!--      location.href='chat.html';-->
+<!--    }-->
+
+<!--    function openLessons(id,title){-->
+<!--      localStorage.setItem('lessonId',id);-->
+<!--      localStorage.setItem('lessonTitle',title);-->
+<!--      location.href='sub-lessons.html';-->
+<!--    }-->
+
+<!--    /* ================= INIT ================= */-->
+<!--    loadPractice();-->
+<!--</script>-->
+
+<!--</body>-->
+<!--</html>-->
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home | Vāṇī</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{
+          font-family:'Inter',sans-serif;
+          background:#f7f8fc;
+          color:#111827;
+        }
+
+        /* ================= NAVBAR ================= */
+        .navbar{
+          display:flex;
+          justify-content:space-between;
+          align-items:center;
+          padding:16px 24px;
+          background:#fff;
+          box-shadow:0 2px 10px rgba(0,0,0,0.05);
+          position:sticky;
+          top:0;
+          z-index:100;
+        }
+        .logo{
+          font-weight:800;
+          font-size:22px;
+          background:linear-gradient(90deg,#7c3aed,#f472b6);
+          -webkit-background-clip:text;
+          -webkit-text-fill-color:transparent;
+        }
+        .nav-links{
+          display:flex;
+          gap:24px;
+          font-size:14px;
+          font-weight:600;
+          color:#6b7280;
+        }
+        .nav-links span{
+          cursor:pointer;
+          padding:8px 12px;
+          border-radius:8px;
+          transition:all 0.3s;
+        }
+        .nav-links span:hover{
+          background:#f3f4f6;
+          color:#7c3aed;
+        }
+        .profile{
+          display:flex;
+          align-items:center;
+          gap:10px;
+          font-size:13px;
+          cursor:pointer;
+          padding:8px 12px;
+          border-radius:12px;
+          transition:background 0.3s;
+        }
+        .profile:hover{
+          background:#f3f4f6;
+        }
+        .avatar{
+          width:36px;
+          height:36px;
+          border-radius:50%;
+          background:#7c3aed;
+          color:white;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          font-weight:700;
+          font-size:16px;
+        }
+        .avatar.has-img{
+          background:none;
+          overflow:hidden;
+        }
+        .avatar.has-img img{
+          width:100%;
+          height:100%;
+          object-fit:cover;
+        }
+
+        /* ================= HERO ================= */
+        .hero{
+          text-align:center;
+          margin:40px 0 28px;
+          padding:0 20px;
+        }
+        .hero h1{
+          font-size:42px;
+          font-weight:800;
+          line-height:1.2;
+          margin-bottom:16px;
+        }
+        .hero h1 span{
+          background:linear-gradient(90deg,#7c3aed,#f472b6);
+          -webkit-background-clip:text;
+          -webkit-text-fill-color:transparent;
+          font-style:italic;
+        }
+        .hero-subtitle{
+          color:#6b7280;
+          font-size:18px;
+          max-width:600px;
+          margin:0 auto 24px;
+        }
+
+        /* ================= TOGGLE ================= */
+        .toggle{
+          display:inline-flex;
+          background:#e5e7eb;
+          border-radius:999px;
+          padding:6px;
+          margin-top:18px;
+        }
+        .toggle button{
+          border:none;
+          padding:10px 24px;
+          border-radius:999px;
+          cursor:pointer;
+          background:transparent;
+          font-weight:600;
+          font-size:15px;
+          transition:all 0.3s;
+          display:flex;
+          align-items:center;
+          gap:8px;
+        }
+        .toggle button.active{
+          background:#fff;
+          box-shadow:0 4px 12px rgba(0,0,0,.1);
+          color:#7c3aed;
+        }
+
+        /* ================= GRID ================= */
+        .container{
+          max-width:1100px;
+          margin:auto;
+          padding:0 20px 40px;
+        }
+        .grid{
+          display:grid;
+          grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+          gap:24px;
+        }
+
+        /* ================= CARD ================= */
+        .card{
+          border-radius:20px;
+          padding:24px;
+          cursor:pointer;
+          transition:.3s;
+          border:2px solid transparent;
+          background:#fff;
+          box-shadow:0 4px 20px rgba(0,0,0,0.05);
+        }
+        .card:hover{
+          transform:translateY(-8px);
+          box-shadow:0 12px 30px rgba(0,0,0,0.1);
+          border-color:#7c3aed;
+        }
+        .card h4{
+          font-size:18px;
+          font-weight:700;
+          margin-bottom:8px;
+          color:#111827;
+        }
+        .card p{
+          font-size:14px;
+          color:#6b7280;
+          margin-bottom:16px;
+          line-height:1.5;
+        }
+        .stars{
+          color:#fbbf24;
+          font-size:14px;
+          margin-bottom:12px;
+        }
+        .card-footer{
+          display:flex;
+          justify-content:space-between;
+          align-items:center;
+          font-size:12px;
+          color:#9ca3af;
+        }
+        .level-badge{
+          background:#e0e7ff;
+          color:#3730a3;
+          padding:4px 10px;
+          border-radius:12px;
+          font-weight:600;
+          font-size:11px;
+        }
+
+        /* ================= DRAWER ================= */
+        .drawer-overlay{
+          position:fixed;
+          inset:0;
+          background:rgba(0,0,0,.3);
+          display:none;
+          z-index:999;
+          backdrop-filter:blur(2px);
+        }
+        .drawer-overlay.show{display:block}
+
+        .drawer{
+          position:fixed;
+          top:0;
+          right:-340px;
+          width:320px;
+          height:100%;
+          background:#fff;
+          padding:24px;
+          transition:.3s;
+          z-index:1000;
+          box-shadow:-5px 0 30px rgba(0,0,0,0.1);
+        }
+        .drawer.open{right:0}
+
+        .drawer-header{
+          text-align:center;
+          margin-bottom:28px;
+          padding-bottom:24px;
+          border-bottom:1px solid #f3f4f6;
+        }
+        .drawer-avatar-wrap{
+          position:relative;
+          width:90px;
+          margin:auto;
+        }
+        .drawer-avatar{
+          width:90px;
+          height:90px;
+          border-radius:50%;
+          background:linear-gradient(135deg,#7c3aed,#f472b6);
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          font-size:32px;
+          font-weight:700;
+          color:white;
+          margin:0 auto 16px;
+          overflow:hidden;
+        }
+        .drawer-avatar img{
+          width:100%;
+          height:100%;
+          object-fit:cover;
+        }
+        .online-dot{
+          position:absolute;
+          right:8px;
+          bottom:12px;
+          width:16px;
+          height:16px;
+          background:#22c55e;
+          border-radius:50%;
+          border:3px solid #fff;
+        }
+        .drawer h3{
+          margin-top:12px;
+          font-size:20px;
+          color:#111827;
+        }
+        .drawer small{
+          color:#6b7280;
+          font-size:14px;
+        }
+
+        .drawer-menu{
+          display:flex;
+          flex-direction:column;
+          gap:12px;
+        }
+        .drawer-item{
+          display:flex;
+          align-items:center;
+          gap:16px;
+          background:#f9fafb;
+          padding:16px;
+          border-radius:14px;
+          cursor:pointer;
+          transition:all 0.3s;
+          border:1px solid transparent;
+        }
+        .drawer-item:hover{
+          background:#f3f4f6;
+          border-color:#d1d5db;
+          transform:translateX(4px);
+        }
+        .drawer-item span{
+          font-size:15px;
+          font-weight:600;
+          color:#111827;
+        }
+        .drawer-item small{
+          display:block;
+          font-size:13px;
+          color:#6b7280;
+        }
+
+        .icon{
+          width:44px;
+          height:44px;
+          border-radius:12px;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          font-size:18px;
+          flex-shrink:0;
+        }
+        .i-blue{background:#e0e7ff;color:#4338ca}
+        .i-green{background:#dcfce7;color:#15803d}
+        .i-purple{background:#ede9fe;color:#6d28d9}
+        .i-orange{background:#ffedd5;color:#c2410c}
+        .i-gray{background:#f3f4f6;color:#374151}
+
+        .drawer-logout{
+          margin-top:24px;
+          background:#fee2e2;
+          color:#dc2626;
+          border:none;
+          width:100%;
+          padding:16px;
+          border-radius:14px;
+          font-weight:600;
+          cursor:pointer;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          gap:10px;
+          transition:all 0.3s;
+        }
+        .drawer-logout:hover{
+          background:#fecaca;
+          transform:translateY(-2px);
+        }
+
+        /* ================= MOBILE ================= */
+        @media(max-width:768px){
+          .nav-links{display:none}
+          .hero h1{font-size:32px}
+          .hero-subtitle{font-size:16px}
+          .grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+          .drawer{width:300px}
+        }
+
+        @media(max-width:480px){
+          .hero h1{font-size:28px}
+          .grid{grid-template-columns:1fr}
+          .toggle button{padding:8px 16px;font-size:14px}
+        }
+
+        /* ================= LOADING ================= */
+        .loading{
+          text-align:center;
+          padding:40px;
+          color:#6b7280;
+        }
+        .spinner{
+          border:3px solid #f3f3f3;
+          border-top:3px solid #7c3aed;
+          border-radius:50%;
+          width:40px;
+          height:40px;
+          animation:spin 1s linear infinite;
+          margin:0 auto 20px;
+        }
+        @keyframes spin{
+          0%{transform:rotate(0deg)}
+          100%{transform:rotate(360deg)}
+        }
+
+        /* ================= EMPTY STATE ================= */
+        .empty-state{
+          text-align:center;
+          padding:60px 20px;
+          color:#6b7280;
+        }
+        .empty-state i{
+          font-size:48px;
+          margin-bottom:16px;
+          color:#d1d5db;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="logo">🟣 Vāṇī</div>
+
+    <div class="nav-links">
+        <span onclick="loadLessons()"><i class="fas fa-book"></i> Lessons</span>
+        <span onclick="loadPractice()"><i class="fas fa-comment-dots"></i> Practice</span>
+        <span onclick="location.href='assessment.html'"><i class="fas fa-chart-bar"></i> Assessment</span>
+        <span onclick="location.href='community.html'"><i class="fas fa-users"></i> Community</span>
+    </div>
+
+    <div class="profile" onclick="openDrawer()">
+        <span id="username">Loading...</span>
+        <div class="avatar" id="avatar">
+            <div id="avatarText">U</div>
+        </div>
+    </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+    <h1>Improve <span>English</span><br>every day</h1>
+    <p class="hero-subtitle">Personalized lessons, interactive practice, and real conversations to master English faster</p>
+
+    <div class="toggle">
+        <button id="practiceBtn" class="active">
+            <i class="fas fa-comment-dots"></i> Practice
+        </button>
+        <button id="lessonBtn">
+            <i class="fas fa-graduation-cap"></i> Lessons
+        </button>
+    </div>
+</div>
+
+<!-- CONTENT -->
+<div class="container">
+    <div class="grid" id="content">
+        <div class="loading">
+            <div class="spinner"></div>
+            <p>Loading content...</p>
+        </div>
+    </div>
+</div>
+
+<!-- DRAWER -->
+<div class="drawer-overlay" id="overlay" onclick="closeDrawer()"></div>
+
+<div class="drawer" id="drawer">
+    <div class="drawer-header">
+        <div class="drawer-avatar-wrap">
+            <div class="drawer-avatar" id="drawerAvatar">
+                <div id="drawerAvatarText">U</div>
+            </div>
+            <div class="online-dot"></div>
+        </div>
+        <h3 id="drawerName">Loading...</h3>
+        <small id="drawerLevel">English Learner</small>
+    </div>
+
+    <div class="drawer-menu">
+        <div class="drawer-item" onclick="location.href='edit-profile.html'">
+            <div class="icon i-blue">
+                <i class="fas fa-user-edit"></i>
+            </div>
+            <div>
+                <span>Edit Profile</span>
+                <small>Update your information</small>
+            </div>
+        </div>
+
+        <div class="drawer-item" onclick="location.href='choose-language.html'">
+            <div class="icon i-green">
+                <i class="fas fa-language"></i>
+            </div>
+            <div>
+                <span>Language Preferences</span>
+                <small>Choose your language</small>
+            </div>
+        </div>
+
+        <div class="drawer-item" onclick="location.href='progress.html'">
+            <div class="icon i-purple">
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <div>
+                <span>Progress</span>
+                <small>View your achievements</small>
+            </div>
+        </div>
+
+        <div class="drawer-item" onclick="location.href='certificate.html'">
+            <div class="icon i-orange">
+                <i class="fas fa-award"></i>
+            </div>
+            <div>
+                <span>Certificate</span>
+                <small>View certificate</small>
+            </div>
+        </div>
+
+        <div class="drawer-item" onclick="location.href='settings.html'">
+            <div class="icon i-gray">
+                <i class="fas fa-cog"></i>
+            </div>
+            <div>
+                <span>Settings</span>
+                <small>App preferences</small>
+            </div>
+        </div>
+    </div>
+
+    <button class="drawer-logout" onclick="logout()">
+        <i class="fas fa-sign-out-alt"></i> Logout
+    </button>
+</div>
+
+<script>
+    /* ================= AUTH CHECK ================= */
+    const token = localStorage.getItem('token');
+    if (!token) {
+        location.href = 'login.html';
+    }
+
+    /* ================= ELEMENTS ================= */
+    const username = document.getElementById('username');
+    const avatar = document.getElementById('avatar');
+    const avatarText = document.getElementById('avatarText');
+    const drawerName = document.getElementById('drawerName');
+    const drawerAvatar = document.getElementById('drawerAvatar');
+    const drawerAvatarText = document.getElementById('drawerAvatarText');
+    const drawerLevel = document.getElementById('drawerLevel');
+    const content = document.getElementById('content');
+    const practiceBtn = document.getElementById('practiceBtn');
+    const lessonBtn = document.getElementById('lessonBtn');
+    const drawer = document.getElementById('drawer');
+    const overlay = document.getElementById('overlay');
+
+    /* ================= LOAD PROFILE ================= */
+    async function loadProfile() {
+        try {
+            const response = await fetch('/api/auth/profile', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+
+            if (response.ok) {
+                const profile = await response.json();
+
+                // Update UI
+                username.textContent = profile.name || 'User';
+                drawerName.textContent = profile.name || 'User';
+                drawerLevel.textContent = `${profile.level || 'Beginner'} • ${profile.learning_language || 'English'}`;
+
+                // Update avatar
+                const firstLetter = (profile.name || 'U')[0].toUpperCase();
+                avatarText.textContent = firstLetter;
+                drawerAvatarText.textContent = firstLetter;
+
+                if (profile.avatar_url) {
+                    avatar.classList.add('has-img');
+                    avatar.innerHTML = `<img src="${profile.avatar_url}" alt="${profile.name}">`;
+
+                    drawerAvatar.classList.add('has-img');
+                    drawerAvatar.innerHTML = `<img src="${profile.avatar_url}" alt="${profile.name}">`;
+                }
+
+                // Save to localStorage
+                localStorage.setItem('name', profile.name);
+                localStorage.setItem('level', profile.level);
+                localStorage.setItem('avatar_url', profile.avatar_url || '');
+            } else {
+                console.error('Failed to load profile');
+            }
+        } catch (error) {
+            console.error('Error loading profile:', error);
+        }
+    }
+
+    /* ================= LOAD PRACTICE CATEGORIES ================= */
+    async function loadPractice() {
+        try {
+            setActive(practiceBtn);
+            content.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading practice categories...</p></div>';
+
+            const response = await fetch('/api/auth/categories', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                renderCards(data, 'practice');
+            } else {
+                content.innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-circle"></i><p>Failed to load practice categories</p></div>';
+            }
+        } catch (error) {
+            console.error('Error loading practice:', error);
+            content.innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><p>Network error. Please try again.</p></div>';
+        }
+    }
+
+    /* ================= LOAD LESSONS ================= */
+    async function loadLessons() {
+        try {
+            setActive(lessonBtn);
+            content.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading lessons...</p></div>';
+
+            const response = await fetch('/api/auth/lesson-categories', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                renderCards(data, 'lesson');
+            } else {
+                content.innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-circle"></i><p>Failed to load lessons</p></div>';
+            }
+        } catch (error) {
+            console.error('Error loading lessons:', error);
+            content.innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><p>Network error. Please try again.</p></div>';
+        }
+    }
+
+    /* ================= RENDER CARDS ================= */
+    function renderCards(data, type) {
+        if (!data || data.length === 0) {
+            content.innerHTML = '<div class="empty-state"><i class="fas fa-inbox"></i><p>No content available yet</p></div>';
+            return;
+        }
+
+        const colors = ['c1', 'c2', 'c3', 'c4', 'c5', 'c6'];
+        const icons = ['💬', '📚', '📝', '🎤', '🎧', '✍️', '🎯', '🌟', '🏆'];
+
+        content.innerHTML = '';
+
+        data.forEach((item, i) => {
+            const card = document.createElement('div');
+            card.className = `card ${colors[i % colors.length]}`;
+
+            const icon = icons[i % icons.length];
+            const title = item.name || item.title || 'Untitled';
+            const description = item.description || 'Practice your English skills';
+
+            card.innerHTML = `
+                <div style="font-size: 32px; margin-bottom: 12px;">${icon}</div>
+                <h4>${title}</h4>
+                <p>${description}</p>
+                <div class="stars">★★★★★</div>
+                <div class="card-footer">
+                    <span>${type === 'practice' ? 'Practice' : 'Lesson'}</span>
+                    <span class="level-badge">${item.level || 'All Levels'}</span>
+                </div>
+            `;
+
+            card.onclick = () => {
+                if (type === 'practice') {
+                    openChat(title);
+                } else {
+                    openLessons(item.id, title);
+                }
+            };
+
+            content.appendChild(card);
+        });
+    }
+
+    /* ================= TOGGLE ACTIVE ================= */
+    function setActive(btn) {
+        practiceBtn.classList.remove('active');
+        lessonBtn.classList.remove('active');
+        btn.classList.add('active');
+    }
+
+    /* ================= DRAWER FUNCTIONS ================= */
+    function openDrawer() {
+        drawer.classList.add('open');
+        overlay.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeDrawer() {
+        drawer.classList.remove('open');
+        overlay.classList.remove('show');
+        document.body.style.overflow = 'auto';
+    }
+
+    /* ================= NAVIGATION ================= */
+    function openChat(name) {
+        localStorage.setItem('chatMode', 'category');
+        localStorage.setItem('chatContext', name);
+        location.href = 'chat.html';
+    }
+
+    function openLessons(id, title) {
+        localStorage.setItem('lessonId', id);
+        localStorage.setItem('lessonTitle', title);
+        location.href = 'sub-lessons.html';
+    }
+
+    /* ================= LOGOUT ================= */
+    function logout() {
+        if (confirm('Are you sure you want to logout?')) {
+            localStorage.clear();
+            location.href = 'login.html';
+        }
+    }
+
+    /* ================= INITIALIZE ================= */
+    document.addEventListener('DOMContentLoaded', async () => {
+        // Load profile first
+        await loadProfile();
+
+        // Load practice by default
+        loadPractice();
+
+        // Add event listeners
+        practiceBtn.onclick = loadPractice;
+        lessonBtn.onclick = loadLessons;
+
+        // Close drawer on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeDrawer();
+        });
+    });
+</script>
+
+</body>
+</html>

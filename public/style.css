@@ -1,0 +1,108 @@
+body {
+  margin: 0;
+  font-family: 'Inter', Arial, sans-serif;
+  background: linear-gradient(135deg, #f2f4ff, #ffffff);
+  min-height: 100vh;
+}
+
+.lang-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.lang-card {
+  width: 380px;
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.12);
+  text-align: center;
+  z-index: 2;
+}
+
+.lang-card h2 {
+  margin-bottom: 8px;
+  font-size: 22px;
+}
+
+.lang-card p {
+  font-size: 14px;
+  color: #777;
+  margin-bottom: 20px;
+}
+
+.select-group {
+  text-align: left;
+  margin-bottom: 16px;
+}
+
+.select-group label {
+  display: block;
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 6px;
+}
+
+select {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  font-size: 15px;
+  outline: none;
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  border-radius: 14px;
+  border: none;
+  background: linear-gradient(135deg,#ff6a88,#6a5cff);
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+/* ---------- Language Wheel ---------- */
+
+.language-wheel {
+  margin-top: 30px;
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  background: linear-gradient(135deg,#ff6a88,#6a5cff);
+  position: relative;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+.language-wheel::before {
+  content: '';
+  position: absolute;
+  inset: 18px;
+  background: rgba(255,255,255,0.25);
+  border-radius: 50%;
+}
+
+.lang {
+  position: absolute;
+  background: white;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: bold;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+}
+
+.en { top: -10px; left: 50%; transform: translateX(-50%); }
+.es { right: -10px; top: 50%; transform: translateY(-50%); }
+.fr { bottom: -10px; left: 50%; transform: translateX(-50%); }
+.de { left: -10px; top: 50%; transform: translateY(-50%); }
+.ar { bottom: 20px; right: 20px; }

@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Progress - Vāṇī</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #7c3aed;
+            --primary-light: #a78bfa;
+            --secondary: #f472b6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1f2937;
+            --light: #f9fafb;
+            --gray: #9ca3af;
+            --card-bg: rgba(255, 255, 255, 0.95);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--dark);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding: 20px 0;
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            color: var(--dark);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: white;
+            transform: translateX(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-title h1 {
+            font-size: 32px;
+            font-weight: 800;
+            color: white;
+            text-align: center;
+        }
+
+        .header-title p {
+            color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+            margin-top: 8px;
+        }
+
+        /* Main Grid */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 992px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .stat-card:nth-child(1) .stat-icon { background: #e0e7ff; color: #4f46e5; }
+        .stat-card:nth-child(2) .stat-icon { background: #fef3c7; color: #d97706; }
+        .stat-card:nth-child(3) .stat-icon { background: #dcfce7; color: #059669; }
+        .stat-card:nth-child(4) .stat-icon { background: #fce7f3; color: #be185d; }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: var(--gray);
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Progress Rings */
+        .progress-rings {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .rings-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .ring-item {
+            text-align: center;
+        }
+
+        .ring {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 15px;
+        }
+
+        .ring-svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .ring-bg {
+            fill: none;
+            stroke: #e5e7eb;
+            stroke-width: 8;
+        }
+
+        .ring-progress {
+            fill: none;
+            stroke-width: 8;
+            stroke-linecap: round;
+            stroke-dasharray: 314;
+            stroke-dashoffset: 314;
+            transition: stroke-dashoffset 1s ease-in-out;
+        }
+
+        .ring-value {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        .ring-label {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        /* Timeline */
+        .timeline-section {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            grid-column: 1 / -1;
+        }
+
+        .timeline {
+            position: relative;
+            margin-top: 30px;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+            padding-left: 30px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -38px;
+            top: 0;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: white;
+            border: 4px solid var(--primary);
+            z-index: 1;
+        }
+
+        .timeline-date {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .timeline-content {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .timeline-content h4 {
+            margin-bottom: 10px;
+            color: var(--dark);
+        }
+
+        /* Achievements */
+        .achievements-section {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .achievement-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .achievement-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+
+        .achievement-card.locked {
+            opacity: 0.5;
+            filter: grayscale(1);
+        }
+
+        .achievement-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .achievement-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .achievement-desc {
+            font-size: 12px;
+            color: var(--gray);
+        }
+
+        /* Level Progress */
+        .level-progress {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .level-bar {
+            height: 20px;
+            background: #e5e7eb;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 30px 0 20px;
+            position: relative;
+        }
+
+        .level-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            transition: width 1s ease-in-out;
+            position: relative;
+        }
+
+        .level-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg,
+                transparent,
+                rgba(255, 255, 255, 0.3),
+                transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .level-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .level-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .current-level {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .next-level {
+            font-size: 14px;
+            color: var(--gray);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--gray);
+        }
+
+        .empty-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+            color: #d1d5db;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-title h1 {
+                font-size: 24px;
+            }
+
+            .stat-value {
+                font-size: 28px;
+            }
+
+            .rings-container {
+                gap: 20px;
+            }
+
+            .ring {
+                width: 100px;
+                height: 100px;
+            }
+
+            .achievements-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .back-btn {
+                align-self: flex-start;
+            }
+
+            .achievements-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <!-- Header -->
+    <div class="header">
+        <button class="back-btn" onclick="goBack()">
+            <i class="fas fa-arrow-left"></i> Back
+        </button>
+        <div class="header-title">
+            <h1>📊 My Learning Progress</h1>
+            <p>Track your journey to English mastery</p>
+        </div>
+        <div style="width: 100px;"></div> <!-- Spacer for alignment -->
+    </div>
+
+    <!-- Stats Overview -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-clock"></i>
+            </div>
+            <div class="stat-value" id="learningStreak">0</div>
+            <div class="stat-label">Day Streak</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-book-open"></i>
+            </div>
+            <div class="stat-value" id="lessonsCompleted">0</div>
+            <div class="stat-label">Lessons Completed</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-comments"></i>
+            </div>
+            <div class="stat-value" id="practiceSessions">0</div>
+            <div class="stat-label">Practice Sessions</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fas fa-trophy"></i>
+            </div>
+            <div class="stat-value" id="achievements">0</div>
+            <div class="stat-label">Achievements</div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-grid">
+        <!-- Left Column: Progress Rings -->
+        <div class="progress-rings">
+            <h2 style="margin-bottom: 20px; color: var(--dark);">
+                <i class="fas fa-chart-pie"></i> Skill Breakdown
+            </h2>
+            <div class="rings-container">
+                <div class="ring-item">
+                    <div class="ring">
+                        <svg class="ring-svg">
+                            <circle class="ring-bg" cx="60" cy="60" r="50"></circle>
+                            <circle class="ring-progress" id="grammarRing" cx="60" cy="60" r="50"
+                                    stroke="#4f46e5"></circle>
+                        </svg>
+                        <div class="ring-value" id="grammarValue">0%</div>
+                    </div>
+                    <div class="ring-label">Grammar</div>
+                </div>
+
+                <div class="ring-item">
+                    <div class="ring">
+                        <svg class="ring-svg">
+                            <circle class="ring-bg" cx="60" cy="60" r="50"></circle>
+                            <circle class="ring-progress" id="vocabRing" cx="60" cy="60" r="50"
+                                    stroke="#059669"></circle>
+                        </svg>
+                        <div class="ring-value" id="vocabValue">0%</div>
+                    </div>
+                    <div class="ring-label">Vocabulary</div>
+                </div>
+
+                <div class="ring-item">
+                    <div class="ring">
+                        <svg class="ring-svg">
+                            <circle class="ring-bg" cx="60" cy="60" r="50"></circle>
+                            <circle class="ring-progress" id="pronunciationRing" cx="60" cy="60" r="50"
+                                    stroke="#d97706"></circle>
+                        </svg>
+                        <div class="ring-value" id="pronunciationValue">0%</div>
+                    </div>
+                    <div class="ring-label">Pronunciation</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Achievements -->
+        <div class="achievements-section">
+            <h2 style="margin-bottom: 20px; color: var(--dark);">
+                <i class="fas fa-medal"></i> Achievements
+            </h2>
+            <div class="achievements-grid" id="achievementsGrid">
+                <!-- Achievements will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Level Progress -->
+    <div class="level-progress">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+            <h2 style="color: var(--dark);">
+                <i class="fas fa-chart-line"></i> Level Progress
+            </h2>
+            <div class="current-level" id="currentLevel">A1</div>
+        </div>
+        <p style="color: var(--gray); margin-bottom: 10px;">Your journey from Beginner to Advanced</p>
+
+        <div class="level-bar">
+            <div class="level-fill" id="levelFill" style="width: 25%"></div>
+        </div>
+
+        <div class="level-labels">
+            <span>A1</span>
+            <span>A2</span>
+            <span>B1</span>
+            <span>B2</span>
+            <span>C1</span>
+            <span>C2</span>
+        </div>
+
+        <div class="level-info">
+            <div>
+                <div class="next-level">Next level: <span id="nextLevel">A2</span></div>
+                <div style="font-size: 12px; color: var(--gray);" id="xpInfo">0/100 XP needed</div>
+            </div>
+            <div style="font-weight: 600; color: var(--primary);" id="progressPercent">25%</div>
+        </div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="timeline-section">
+        <h2 style="margin-bottom: 20px; color: var(--dark);">
+            <i class="fas fa-history"></i> Recent Activity
+        </h2>
+        <div class="timeline" id="activityTimeline">
+            <!-- Timeline items will be loaded here -->
+        </div>
+    </div>
+</div>
+
+<script>
+    // Check authentication
+    const token = localStorage.getItem('token');
+    if (!token) {
+        location.href = 'login.html';
+    }
+
+    // Sample data (Replace with API calls)
+    const progressData = {
+        streak: 7,
+        lessonsCompleted: 15,
+        practiceSessions: 42,
+        achievements: 8,
+        skills: {
+            grammar: 75,
+            vocabulary: 60,
+            pronunciation: 45
+        },
+        level: 'A1',
+        levelProgress: 25,
+        nextLevel: 'A2',
+        xpNeeded: 75,
+        currentXP: 25,
+        totalXP: 100,
+        achievementsList: [
+            { id: 1, name: "First Steps", desc: "Complete first lesson", icon: "👣", unlocked: true },
+            { id: 2, name: "7-Day Streak", desc: "Learn for 7 consecutive days", icon: "🔥", unlocked: true },
+            { id: 3, name: "Grammar Master", desc: "Score 90%+ in grammar", icon: "📚", unlocked: false },
+            { id: 4, name: "Social Butterfly", desc: "Complete 10 practice sessions", icon: "🦋", unlocked: true },
+            { id: 5, name: "Vocabulary King", desc: "Learn 100 words", icon: "👑", unlocked: false },
+            { id: 6, name: "Night Owl", desc: "Learn after midnight", icon: "🦉", unlocked: true },
+            { id: 7, name: "Perfect Score", desc: "100% in assessment", icon: "💯", unlocked: false },
+            { id: 8, name: "Conversationalist", desc: "Complete 50 conversations", icon: "💬", unlocked: false }
+        ],
+        activity: [
+            { date: "Today, 10:30 AM", title: "Completed 'Greetings' lesson", desc: "Scored 95% in the quiz" },
+            { date: "Yesterday, 8:15 PM", title: "Practice session: Business English", desc: "15 minutes conversation practice" },
+            { date: "Dec 12, 2023", title: "Unlocked 'Grammar Pro' achievement", desc: "Mastered present tense" },
+            { date: "Dec 10, 2023", title: "Level up to A1", desc: "Advanced from Beginner level" },
+            { date: "Dec 8, 2023", title: "First practice session", desc: "Started daily conversations" }
+        ]
+    };
+
+    // DOM Elements
+    const elements = {
+        learningStreak: document.getElementById('learningStreak'),
+        lessonsCompleted: document.getElementById('lessonsCompleted'),
+        practiceSessions: document.getElementById('practiceSessions'),
+        achievements: document.getElementById('achievements'),
+        grammarRing: document.getElementById('grammarRing'),
+        grammarValue: document.getElementById('grammarValue'),
+        vocabRing: document.getElementById('vocabRing'),
+        vocabValue: document.getElementById('vocabValue'),
+        pronunciationRing: document.getElementById('pronunciationRing'),
+        pronunciationValue: document.getElementById('pronunciationValue'),
+        achievementsGrid: document.getElementById('achievementsGrid'),
+        currentLevel: document.getElementById('currentLevel'),
+        nextLevel: document.getElementById('nextLevel'),
+        levelFill: document.getElementById('levelFill'),
+        progressPercent: document.getElementById('progressPercent'),
+        xpInfo: document.getElementById('xpInfo'),
+        activityTimeline: document.getElementById('activityTimeline')
+    };
+
+    // Initialize Progress
+    function initializeProgress() {
+        // Update stats
+        elements.learningStreak.textContent = progressData.streak;
+        elements.lessonsCompleted.textContent = progressData.lessonsCompleted;
+        elements.practiceSessions.textContent = progressData.practiceSessions;
+        elements.achievements.textContent = progressData.achievements;
+
+        // Update progress rings
+        updateProgressRing(elements.grammarRing, elements.grammarValue, progressData.skills.grammar);
+        updateProgressRing(elements.vocabRing, elements.vocabValue, progressData.skills.vocabulary);
+        updateProgressRing(elements.pronunciationRing, elements.pronunciationValue, progressData.skills.pronunciation);
+
+        // Update level progress
+        elements.currentLevel.textContent = progressData.level;
+        elements.nextLevel.textContent = progressData.nextLevel;
+        elements.levelFill.style.width = `${progressData.levelProgress}%`;
+        elements.progressPercent.textContent = `${progressData.levelProgress}%`;
+        elements.xpInfo.textContent = `${progressData.currentXP}/${progressData.totalXP} XP needed`;
+
+        // Load achievements
+        loadAchievements();
+
+        // Load timeline
+        loadTimeline();
+    }
+
+    // Update progress ring animation
+    function updateProgressRing(ringElement, valueElement, percentage) {
+        const circumference = 2 * Math.PI * 50;
+        const offset = circumference - (percentage / 100) * circumference;
+
+        ringElement.style.strokeDashoffset = offset;
+        valueElement.textContent = `${percentage}%`;
+
+        // Add color based on percentage
+        let color = '#ef4444'; // red for low
+        if (percentage >= 75) color = '#10b981'; // green for high
+        else if (percentage >= 50) color = '#f59e0b'; // yellow for medium
+
+        ringElement.style.stroke = color;
+    }
+
+    // Load achievements
+    function loadAchievements() {
+        elements.achievementsGrid.innerHTML = '';
+
+        progressData.achievementsList.forEach(achievement => {
+            const card = document.createElement('div');
+            card.className = `achievement-card ${achievement.unlocked ? '' : 'locked'}`;
+            card.innerHTML = `
+                <div class="achievement-icon">${achievement.icon}</div>
+                <div class="achievement-name">${achievement.name}</div>
+                <div class="achievement-desc">${achievement.desc}</div>
+            `;
+
+            if (!achievement.unlocked) {
+                card.title = "Locked - Keep learning to unlock!";
+            }
+
+            elements.achievementsGrid.appendChild(card);
+        });
+    }
+
+    // Load timeline
+    function loadTimeline() {
+        elements.activityTimeline.innerHTML = '';
+
+        progressData.activity.forEach(activity => {
+            const item = document.createElement('div');
+            item.className = 'timeline-item';
+            item.innerHTML = `
+                <div class="timeline-date">${activity.date}</div>
+                <div class="timeline-content">
+                    <h4>${activity.title}</h4>
+                    <p style="color: var(--gray); font-size: 14px;">${activity.desc}</p>
+                </div>
+            `;
+            elements.activityTimeline.appendChild(item);
+        });
+    }
+
+    // Load user data from API
+    async function loadUserProgress() {
+        try {
+            // In a real app, you would fetch from your API
+            // const response = await fetch('/api/auth/progress', {
+            //     headers: { 'Authorization': `Bearer ${token}` }
+            // });
+            // const data = await response.json();
+
+            // For now, use sample data
+            initializeProgress();
+
+            // Simulate loading animation
+            setTimeout(() => {
+                animateProgress();
+            }, 500);
+
+        } catch (error) {
+            console.error('Error loading progress:', error);
+        }
+    }
+
+    // Animate progress bars
+    function animateProgress() {
+        // Animate rings
+        const rings = [elements.grammarRing, elements.vocabRing, elements.pronunciationRing];
+        rings.forEach(ring => {
+            ring.style.transition = 'stroke-dashoffset 1.5s ease-in-out';
+        });
+
+        // Animate level progress bar
+        elements.levelFill.style.transition = 'width 1.5s ease-in-out';
+    }
+
+    // Navigation
+    function goBack() {
+        window.history.back();
+    }
+
+    // Initialize on load
+    document.addEventListener('DOMContentLoaded', () => {
+        loadUserProgress();
+
+        // Add keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                goBack();
+            }
+        });
+    });
+</script>
+</body>
+</html>

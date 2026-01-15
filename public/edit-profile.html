@@ -1,0 +1,769 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="utf-8"/>-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>-->
+<!--    <title>Edit Profile - Vāṇī</title>-->
+
+<!--    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>-->
+
+<!--    <link rel="preconnect" href="https://fonts.googleapis.com"/>-->
+<!--    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>-->
+<!--    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>-->
+<!--    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>-->
+
+<!--    <script>-->
+<!--        tailwind.config = {-->
+<!--          darkMode: "class",-->
+<!--          theme: {-->
+<!--            extend: {-->
+<!--              colors: {-->
+<!--                primary: "#7C3AED",-->
+<!--                "background-light": "#F8FAFC",-->
+<!--                "background-dark": "#0F172A",-->
+<!--              },-->
+<!--              fontFamily: {-->
+<!--                display: ["Inter", "sans-serif"],-->
+<!--              },-->
+<!--              borderRadius: {-->
+<!--                DEFAULT: "0.75rem",-->
+<!--              },-->
+<!--            },-->
+<!--          },-->
+<!--        };-->
+<!--    </script>-->
+
+<!--    <style>-->
+<!--        body { font-family: 'Inter', sans-serif; }-->
+<!--        .gradient-bg {-->
+<!--          background: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);-->
+<!--        }-->
+<!--        .dark .gradient-bg {-->
+<!--          background: radial-gradient(circle at top right, #1e1b4b, #0f172a);-->
+<!--        }-->
+<!--        .btn-gradient {-->
+<!--          background: linear-gradient(90deg, #F472B6 0%, #7C3AED 100%);-->
+<!--        }-->
+<!--        .btn-gradient:hover { opacity: 0.9; }-->
+<!--    </style>-->
+<!--</head>-->
+
+<!--<body class="bg-background-light dark:bg-background-dark min-h-screen flex items-center justify-center p-6 gradient-bg transition-colors duration-300">-->
+
+<!--&lt;!&ndash; DARK MODE TOGGLE &ndash;&gt;-->
+<!--<button-->
+<!--        class="fixed top-6 right-6 p-2 rounded-full bg-white dark:bg-gray-800 shadow-lg text-gray-600 dark:text-gray-300"-->
+<!--        onclick="document.documentElement.classList.toggle('dark')">-->
+<!--    <span class="material-symbols-outlined">dark_mode</span>-->
+<!--</button>-->
+
+<!--<div class="w-full max-w-2xl">-->
+
+<!--    &lt;!&ndash; CARD &ndash;&gt;-->
+<!--    <div class="bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden border border-white/20 dark:border-gray-700/30">-->
+
+<!--        &lt;!&ndash; HEADER &ndash;&gt;-->
+<!--        <div class="px-8 pt-10 pb-6 text-center">-->
+<!--            <div class="relative inline-block">-->
+<!--                <div id="avatar"-->
+<!--                     class="w-32 h-32 rounded-full bg-gray-200 dark:bg-gray-800 flex items-center justify-center border-4 border-white dark:border-gray-700 shadow-md text-4xl font-bold text-gray-500 dark:text-gray-300">-->
+<!--                    A-->
+<!--                </div>-->
+<!--                <button class="absolute bottom-1 right-1 bg-gradient-to-tr from-primary to-purple-400 text-white p-2 rounded-full shadow-lg hover:scale-105 transition-transform">-->
+<!--                    <span class="material-symbols-outlined text-sm">edit</span>-->
+<!--                </button>-->
+<!--            </div>-->
+
+<!--            <h1 class="mt-6 text-2xl font-bold text-gray-900 dark:text-white">Edit Profile</h1>-->
+<!--            <p class="text-gray-500 dark:text-gray-400 text-sm">-->
+<!--                Update your personal information and preferences-->
+<!--            </p>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; FORM &ndash;&gt;-->
+<!--        <form class="px-8 pb-10 space-y-6" onsubmit="saveProfile(event)">-->
+<!--            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">-->
+
+<!--                <div class="space-y-2">-->
+<!--                    <label class="text-sm font-semibold text-gray-700 dark:text-gray-300 ml-1">Name</label>-->
+<!--                    <input id="name"-->
+<!--                           class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all dark:text-white"-->
+<!--                           type="text"/>-->
+<!--                </div>-->
+
+<!--                <div class="space-y-2">-->
+<!--                    <label class="text-sm font-semibold text-gray-700 dark:text-gray-300 ml-1">Mobile Number</label>-->
+<!--                    <div class="relative">-->
+<!--                        <input-->
+<!--                                class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl text-gray-500 dark:text-gray-400 cursor-not-allowed"-->
+<!--                                disabled-->
+<!--                                value="+1 (555) 123-4567"/>-->
+<!--                        <span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 text-lg">lock</span>-->
+<!--                    </div>-->
+<!--                    <p class="text-[10px] text-gray-400 dark:text-gray-500 ml-1 italic">-->
+<!--                        Mobile number cannot be changed-->
+<!--                    </p>-->
+<!--                </div>-->
+
+<!--                <div class="space-y-2">-->
+<!--                    <label class="text-sm font-semibold text-gray-700 dark:text-gray-300 ml-1">Native Language</label>-->
+<!--                    <input id="language"-->
+<!--                           class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all dark:text-white"-->
+<!--                           type="text"/>-->
+<!--                </div>-->
+
+<!--                <div class="space-y-2">-->
+<!--                    <label class="text-sm font-semibold text-gray-700 dark:text-gray-300 ml-1">Email ID</label>-->
+<!--                    <input id="email"-->
+<!--                           class="w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-primary/50 focus:border-primary outline-none transition-all dark:text-white"-->
+<!--                           type="email"/>-->
+<!--                </div>-->
+
+<!--            </div>-->
+
+<!--            &lt;!&ndash; ACTIONS &ndash;&gt;-->
+<!--            <div class="flex flex-col md:flex-row items-center justify-center gap-4 pt-6 border-t border-gray-100 dark:border-gray-800">-->
+<!--                <button class="btn-gradient w-full md:w-48 text-white font-semibold py-3 px-6 rounded-xl shadow-lg shadow-primary/20 transition-all active:scale-95">-->
+<!--                    Save Changes-->
+<!--                </button>-->
+<!--                <button type="button"-->
+<!--                        onclick="cancelEdit()"-->
+<!--                        class="w-full md:w-48 bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 font-semibold py-3 px-6 rounded-xl border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all active:scale-95">-->
+<!--                    Cancel-->
+<!--                </button>-->
+<!--            </div>-->
+<!--        </form>-->
+<!--    </div>-->
+
+<!--    <div class="mt-8 text-center text-gray-400 dark:text-gray-600 text-sm">-->
+<!--        <p>© 2024 Vāṇī. All rights reserved.</p>-->
+<!--    </div>-->
+
+<!--</div>-->
+
+<!--<script>-->
+<!--    /* ================= LOAD DATA ================= */-->
+<!--    const nameInput = document.getElementById('name');-->
+<!--    const emailInput = document.getElementById('email');-->
+<!--    const languageInput = document.getElementById('language');-->
+<!--    const avatar = document.getElementById('avatar');-->
+
+<!--    nameInput.value = localStorage.getItem('name') || 'Alex Johnson';-->
+<!--    emailInput.value = localStorage.getItem('email') || 'alex123@gmail.com';-->
+<!--    languageInput.value = localStorage.getItem('language') || 'English';-->
+<!--    avatar.innerText = nameInput.value[0].toUpperCase();-->
+
+<!--    /* UPDATE AVATAR ON NAME CHANGE */-->
+<!--    nameInput.addEventListener('input',()=>{-->
+<!--      avatar.innerText = nameInput.value ? nameInput.value[0].toUpperCase() : 'U';-->
+<!--    });-->
+
+<!--    /* SAVE */-->
+<!--    function saveProfile(e){-->
+<!--      e.preventDefault();-->
+<!--      if(!nameInput.value.trim()) return alert('Name is required');-->
+
+<!--      localStorage.setItem('name',nameInput.value);-->
+<!--      localStorage.setItem('email',emailInput.value);-->
+<!--      localStorage.setItem('language',languageInput.value);-->
+
+<!--      alert('Profile updated successfully');-->
+<!--      location.href='home.html';-->
+<!--    }-->
+
+<!--    /* CANCEL */-->
+<!--    function cancelEdit(){-->
+<!--      history.back();-->
+<!--    }-->
+<!--</script>-->
+
+<!--</body>-->
+<!--</html>-->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Profile - Vāṇī</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .btn-gradient {
+            background: linear-gradient(90deg, #7C3AED, #F472B6);
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(124, 58, 237, 0.3);
+        }
+
+        .btn-secondary {
+            background: white;
+            border: 2px solid #7C3AED;
+            color: #7C3AED;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .btn-secondary:hover {
+            background: #f3f4f6;
+            transform: translateY(-2px);
+        }
+
+        .profile-container {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            overflow: hidden;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .profile-header {
+            background: linear-gradient(90deg, #7C3AED, #F472B6);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            border: 4px solid white;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .edit-avatar-btn {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background: white;
+            color: #7C3AED;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: all 0.3s;
+        }
+
+        .edit-avatar-btn:hover {
+            transform: scale(1.1);
+            background: #f3f4f6;
+        }
+
+        .profile-form {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #374151;
+            font-size: 14px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #7C3AED;
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+        }
+
+        .form-input.error {
+            border-color: #ef4444;
+        }
+
+        .error-message {
+            color: #ef4444;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 16px;
+            margin-top: 30px;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #7C3AED;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #10b981;
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            display: none;
+            align-items: center;
+            gap: 12px;
+            z-index: 1001;
+            transition: transform 0.3s;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .toast.error {
+            background: #ef4444;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+
+<body>
+<!-- Back Button -->
+<div class="back-btn" onclick="goBack()">
+    <span class="material-symbols-outlined" style="color: white;">arrow_back</span>
+</div>
+
+<!-- Main Container -->
+<div class="profile-container">
+    <div class="profile-header">
+        <h1 class="text-2xl font-bold">Edit Profile</h1>
+        <p class="text-white/80 mt-2">Update your personal information</p>
+    </div>
+
+    <div class="profile-form">
+        <input type="file" id="fileInput" accept="image/*" class="hidden">
+
+        <div class="form-group text-center">
+            <div class="profile-avatar" id="profileAvatar">
+                <div id="avatarInitial">U</div>
+            </div>
+            <button type="button"
+                    onclick="document.getElementById('fileInput').click()"
+                    class="edit-avatar-btn">
+                <i class="fas fa-camera"></i>
+            </button>
+            <p class="text-gray-500 text-sm mt-2">Click the camera icon to change photo</p>
+        </div>
+
+        <form id="profileForm">
+            <div class="form-group">
+                <label class="form-label">Full Name</label>
+                <input type="text"
+                       id="name"
+                       class="form-input"
+                       placeholder="Enter your full name"
+                       required>
+                <div class="error-message" id="nameError">Name is required</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <input type="email"
+                       id="email"
+                       class="form-input"
+                       placeholder="Enter your email"
+                       required>
+                <div class="error-message" id="emailError">Please enter a valid email</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Native Language</label>
+                <select id="language" class="form-input" required>
+                    <option value="">Select your native language</option>
+                    <option value="Hindi">Hindi</option>
+                    <option value="Spanish">Spanish</option>
+                    <option value="French">French</option>
+                    <option value="German">German</option>
+                    <option value="Chinese">Chinese</option>
+                    <option value="Japanese">Japanese</option>
+                    <option value="Arabic">Arabic</option>
+                    <option value="Bengali">Bengali</option>
+                    <option value="Russian">Russian</option>
+                    <option value="Portuguese">Portuguese</option>
+                </select>
+                <div class="error-message" id="languageError">Please select a language</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Phone Number</label>
+                <input type="text"
+                       id="phone"
+                       class="form-input"
+                       placeholder="Your phone number"
+                       readonly
+                       disabled>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-gradient flex-1 py-3 rounded-xl">
+                    <i class="fas fa-save mr-2"></i> Save Changes
+                </button>
+                <button type="button" onclick="goBack()" class="btn-secondary flex-1 py-3 rounded-xl">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+</div>
+
+<!-- Toast Notification -->
+<div class="toast" id="toast">
+    <i class="fas fa-check-circle"></i>
+    <span id="toastMessage">Profile updated successfully!</span>
+</div>
+
+<script>
+    /* ================= AUTH CHECK ================= */
+    const token = localStorage.getItem('token');
+    if (!token) {
+        alert('Please login first');
+        location.href = 'login.html';
+    }
+
+    /* ================= ELEMENTS ================= */
+    const fileInput = document.getElementById('fileInput');
+    const profileAvatar = document.getElementById('profileAvatar');
+    const avatarInitial = document.getElementById('avatarInitial');
+    const nameInput = document.getElementById('name');
+    const emailInput = document.getElementById('email');
+    const languageSelect = document.getElementById('language');
+    const phoneInput = document.getElementById('phone');
+    const profileForm = document.getElementById('profileForm');
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    const toast = document.getElementById('toast');
+    const toastMessage = document.getElementById('toastMessage');
+
+    let selectedFile = null;
+    let currentAvatarUrl = '';
+
+    /* ================= LOAD PROFILE ================= */
+    async function loadProfile() {
+        try {
+            showLoading();
+
+            const response = await fetch('/api/auth/profile', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+
+            if (response.ok) {
+                const profile = await response.json();
+
+                // Fill form fields
+                nameInput.value = profile.name || '';
+                emailInput.value = profile.email || '';
+                phoneInput.value = profile.phone || '';
+
+                // Set language
+                if (profile.native_language) {
+                    languageSelect.value = profile.native_language;
+                }
+
+                // Set avatar
+                currentAvatarUrl = profile.avatar_url || '';
+                updateAvatar(profile.name, currentAvatarUrl);
+
+                // Save to localStorage
+                localStorage.setItem('name', profile.name);
+                localStorage.setItem('email', profile.email);
+                localStorage.setItem('language', profile.native_language);
+                localStorage.setItem('avatar_url', currentAvatarUrl);
+
+            } else {
+                showToast('Failed to load profile', true);
+            }
+        } catch (error) {
+            console.error('Error loading profile:', error);
+            showToast('Network error. Please try again.', true);
+        } finally {
+            hideLoading();
+        }
+    }
+
+    /* ================= UPDATE AVATAR DISPLAY ================= */
+    function updateAvatar(name, avatarUrl) {
+        const firstLetter = (name || 'U')[0].toUpperCase();
+        avatarInitial.textContent = firstLetter;
+
+        if (avatarUrl) {
+            profileAvatar.innerHTML = `<img src="${avatarUrl}" alt="${name}">`;
+        } else {
+            profileAvatar.innerHTML = `<div id="avatarInitial">${firstLetter}</div>`;
+        }
+    }
+
+    /* ================= FILE INPUT HANDLER ================= */
+    fileInput.addEventListener('change', () => {
+        selectedFile = fileInput.files[0];
+        if (!selectedFile) return;
+
+        // Validate file type
+        if (!selectedFile.type.startsWith('image/')) {
+            showToast('Please select an image file', true);
+            return;
+        }
+
+        // Validate file size (5MB)
+        if (selectedFile.size > 5 * 1024 * 1024) {
+            showToast('Image must be less than 5MB', true);
+            return;
+        }
+
+        // Preview image
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            profileAvatar.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+        };
+        reader.readAsDataURL(selectedFile);
+    });
+
+    /* ================= FORM VALIDATION ================= */
+    function validateForm() {
+        let isValid = true;
+
+        // Reset errors
+        document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+        document.querySelectorAll('.form-input').forEach(el => el.classList.remove('error'));
+
+        // Validate name
+        if (!nameInput.value.trim()) {
+            document.getElementById('nameError').style.display = 'block';
+            nameInput.classList.add('error');
+            isValid = false;
+        }
+
+        // Validate email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (emailInput.value && !emailRegex.test(emailInput.value)) {
+            document.getElementById('emailError').style.display = 'block';
+            emailInput.classList.add('error');
+            isValid = false;
+        }
+
+        // Validate language
+        if (!languageSelect.value) {
+            document.getElementById('languageError').style.display = 'block';
+            languageSelect.classList.add('error');
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
+    /* ================= FORM SUBMISSION ================= */
+    profileForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        if (!validateForm()) {
+            return;
+        }
+
+        try {
+            showLoading();
+
+            const formData = new FormData();
+            formData.append('name', nameInput.value.trim());
+            formData.append('email', emailInput.value.trim());
+            formData.append('language', languageSelect.value);
+
+            if (selectedFile) {
+                formData.append('avatar', selectedFile);
+            }
+
+            const response = await fetch('/api/auth/profile', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                    // Note: Don't set Content-Type for FormData, browser will set it automatically
+                },
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                // Update localStorage
+                localStorage.setItem('name', nameInput.value.trim());
+                localStorage.setItem('email', emailInput.value.trim());
+                localStorage.setItem('language', languageSelect.value);
+
+                if (data.profile?.avatar_url) {
+                    localStorage.setItem('avatar_url', data.profile.avatar_url);
+                }
+
+                showToast('Profile updated successfully!');
+
+                // Redirect after success
+                setTimeout(() => {
+                    location.href = 'home.html';
+                }, 1500);
+
+            } else {
+                showToast(data.message || 'Update failed', true);
+            }
+
+        } catch (error) {
+            console.error('Error updating profile:', error);
+            showToast('Network error. Please try again.', true);
+        } finally {
+            hideLoading();
+        }
+    });
+
+    /* ================= UI FUNCTIONS ================= */
+    function showLoading() {
+        loadingOverlay.style.display = 'flex';
+    }
+
+    function hideLoading() {
+        loadingOverlay.style.display = 'none';
+    }
+
+    function showToast(message, isError = false) {
+        toastMessage.textContent = message;
+        toast.className = 'toast';
+        toast.classList.add(isError ? 'error' : 'success');
+        toast.style.display = 'flex';
+
+        setTimeout(() => {
+            toast.classList.add('show');
+        }, 10);
+
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 300);
+        }, 3000);
+    }
+
+    function goBack() {
+        if (document.referrer && document.referrer.includes(location.hostname)) {
+            history.back();
+        } else {
+            location.href = 'home.html';
+        }
+    }
+
+    /* ================= INITIALIZATION ================= */
+    document.addEventListener('DOMContentLoaded', () => {
+        loadProfile();
+
+        // Close toast on click
+        toast.addEventListener('click', () => {
+            toast.classList.remove('show');
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 300);
+        });
+
+        // Prevent form submission on Enter key in input fields
+        document.querySelectorAll('.form-input').forEach(input => {
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && input.type !== 'textarea') {
+                    e.preventDefault();
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>
+
+

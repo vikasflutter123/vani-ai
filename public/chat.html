@@ -1,0 +1,399 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>AI Voice Chat</title>-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+
+<!--    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">-->
+
+<!--    <style>-->
+<!--        *{-->
+<!--          box-sizing:border-box;-->
+<!--        }-->
+<!--        body{-->
+<!--          margin:0;-->
+<!--          font-family:'Inter',sans-serif;-->
+<!--          background:radial-gradient(circle at top,#f3f6ff,#ffffff);-->
+<!--          height:100vh;-->
+<!--          overflow:hidden;-->
+<!--          color:#1f2937;-->
+<!--        }-->
+
+<!--        /* TOP BAR */-->
+<!--        .top-bar{-->
+<!--          position:absolute;-->
+<!--          top:16px;-->
+<!--          left:16px;-->
+<!--          right:16px;-->
+<!--          display:flex;-->
+<!--          justify-content:space-between;-->
+<!--          align-items:center;-->
+<!--          font-size:13px;-->
+<!--        }-->
+<!--        .live{-->
+<!--          background:#fee2e2;-->
+<!--          color:#dc2626;-->
+<!--          padding:4px 10px;-->
+<!--          border-radius:999px;-->
+<!--          font-weight:600;-->
+<!--        }-->
+
+<!--        /* CENTER ORB */-->
+<!--        .orb-container{-->
+<!--          position:absolute;-->
+<!--          inset:0;-->
+<!--          display:flex;-->
+<!--          flex-direction:column;-->
+<!--          align-items:center;-->
+<!--          justify-content:center;-->
+<!--          text-align:center;-->
+<!--        }-->
+
+<!--        .orb{-->
+<!--          width:180px;-->
+<!--          height:180px;-->
+<!--          border-radius:50%;-->
+<!--          background:radial-gradient(circle at 30% 30%,#7c7cff,#4f46e5,#4338ca);-->
+<!--          box-shadow:-->
+<!--            0 0 40px rgba(79,70,229,.6),-->
+<!--            0 0 120px rgba(99,102,241,.6);-->
+<!--          animation:pulse 3s ease-in-out infinite;-->
+<!--        }-->
+
+<!--        @keyframes pulse{-->
+<!--          0%{ transform:scale(.9); }-->
+<!--          50%{ transform:scale(1.05); }-->
+<!--          100%{ transform:scale(.9); }-->
+<!--        }-->
+
+<!--        .orb-text{-->
+<!--          margin-top:22px;-->
+<!--          font-size:14px;-->
+<!--          color:#6b7280;-->
+<!--        }-->
+
+<!--        /* CONTROL BAR */-->
+<!--        .controls{-->
+<!--          position:absolute;-->
+<!--          bottom:28px;-->
+<!--          left:50%;-->
+<!--          transform:translateX(-50%);-->
+<!--          width:90%;-->
+<!--          max-width:520px;-->
+<!--          background:rgba(255,255,255,.85);-->
+<!--          backdrop-filter:blur(20px);-->
+<!--          border-radius:24px;-->
+<!--          padding:14px 18px;-->
+<!--          display:flex;-->
+<!--          align-items:center;-->
+<!--          gap:14px;-->
+<!--          box-shadow:0 10px 30px rgba(0,0,0,.08);-->
+<!--        }-->
+
+<!--        .slider{-->
+<!--          flex:1;-->
+<!--          height:4px;-->
+<!--          background:#e5e7eb;-->
+<!--          border-radius:10px;-->
+<!--          position:relative;-->
+<!--        }-->
+<!--        .slider::after{-->
+<!--          content:'';-->
+<!--          width:40%;-->
+<!--          height:100%;-->
+<!--          background:#6366f1;-->
+<!--          position:absolute;-->
+<!--          border-radius:10px;-->
+<!--        }-->
+
+<!--        /* BUTTONS */-->
+<!--        .btn{-->
+<!--          width:42px;-->
+<!--          height:42px;-->
+<!--          border-radius:50%;-->
+<!--          border:none;-->
+<!--          cursor:pointer;-->
+<!--          display:flex;-->
+<!--          align-items:center;-->
+<!--          justify-content:center;-->
+<!--          font-size:18px;-->
+<!--        }-->
+
+<!--        .mic{-->
+<!--          background:#6366f1;-->
+<!--          color:#fff;-->
+<!--          box-shadow:0 0 20px rgba(99,102,241,.7);-->
+<!--        }-->
+
+<!--        .close{-->
+<!--          background:#fee2e2;-->
+<!--          color:#dc2626;-->
+<!--        }-->
+
+<!--        .footer-text{-->
+<!--          position:absolute;-->
+<!--          bottom:6px;-->
+<!--          width:100%;-->
+<!--          text-align:center;-->
+<!--          font-size:11px;-->
+<!--          color:#9ca3af;-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+
+<!--<body>-->
+
+<!--&lt;!&ndash; TOP &ndash;&gt;-->
+<!--<div class="top-bar">-->
+<!--    <div class="live">● LIVE</div>-->
+<!--    <div>⚙️</div>-->
+<!--</div>-->
+
+<!--&lt;!&ndash; CENTER &ndash;&gt;-->
+<!--<div class="orb-container">-->
+<!--    <div class="orb"></div>-->
+<!--    <div class="orb-text">“I’m listening, how can I help you today?”</div>-->
+<!--</div>-->
+
+<!--&lt;!&ndash; CONTROLS &ndash;&gt;-->
+<!--<div class="controls">-->
+<!--    <span>🔈</span>-->
+<!--    <div class="slider"></div>-->
+<!--    <button class="btn mic">🎤</button>-->
+<!--    <button class="btn close" onclick="endChat()">✖</button>-->
+<!--</div>-->
+
+<!--<div class="footer-text">-->
+<!--    LISTENING MODE · CONVERSATIONAL ENGLISH-->
+<!--</div>-->
+
+<!--<script>-->
+<!--    const token = localStorage.getItem('token');-->
+<!--    const mode = localStorage.getItem('chatMode');-->
+<!--    const context = localStorage.getItem('chatContext');-->
+
+<!--    if(!token || !mode || !context){-->
+<!--      location.href='login.html';-->
+<!--    }-->
+
+<!--    function endChat(){-->
+<!--      alert('Chat ended');-->
+<!--      location.href='home.html';-->
+<!--    }-->
+<!--</script>-->
+
+<!--</body>-->
+<!--</html>-->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Voice Chat</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        *{box-sizing:border-box}
+        body{
+          margin:0;
+          font-family:Inter,sans-serif;
+          background:radial-gradient(circle at top,#f3f6ff,#fff);
+          height:100vh;
+          overflow:hidden;
+        }
+
+        /* TOP BAR */
+        .top-bar{
+          position:absolute;top:16px;left:16px;right:16px;
+          display:flex;justify-content:space-between;font-size:13px;
+        }
+        .live{
+          background:#fee2e2;color:#dc2626;
+          padding:4px 10px;border-radius:999px;font-weight:600;
+        }
+
+        /* CENTER */
+        .orb-container{
+          position:absolute;inset:0;
+          display:flex;flex-direction:column;
+          align-items:center;justify-content:center;
+        }
+        .orb{
+          width:180px;height:180px;border-radius:50%;
+          background:radial-gradient(circle,#7c7cff,#4f46e5);
+          box-shadow:0 0 50px rgba(99,102,241,.7);
+          animation:pulse 1.6s ease-in-out infinite;
+        }
+        @keyframes pulse{
+          0%{transform:scale(.9)}
+          50%{transform:scale(1.05)}
+          100%{transform:scale(.9)}
+        }
+
+        .text{
+          margin-top:20px;font-size:14px;
+          max-width:90%;text-align:center;
+        }
+
+        /* CONTROLS */
+        .controls{
+          position:absolute;bottom:30px;left:50%;
+          transform:translateX(-50%);
+          background:#fff;border-radius:24px;
+          padding:14px 18px;
+          display:flex;gap:16px;
+          box-shadow:0 10px 30px rgba(0,0,0,.08);
+        }
+        .btn{
+          width:44px;height:44px;border-radius:50%;
+          border:none;cursor:pointer;
+          font-size:18px;
+        }
+        .mic{background:#6366f1;color:#fff}
+        .close{background:#fee2e2;color:#dc2626}
+    </style>
+</head>
+
+<body>
+
+<div class="top-bar">
+    <div class="live">● LIVE</div>
+    <div>🎧</div>
+</div>
+
+<div class="orb-container">
+    <div class="orb"></div>
+    <div class="text" id="status">Tap mic and speak…</div>
+    <div class="text" id="aiText" style="color:#16a34a"></div>
+</div>
+
+<div class="controls">
+    <button class="btn mic" id="micBtn">🎤</button>
+    <button class="btn close" onclick="endChat()">✖</button>
+</div>
+
+<script>
+    /* ================= AUTH ================= */
+    const token = localStorage.getItem('token');
+    if(!token) location.href='login.html';
+
+    /* ================= SPEECH ================= */
+    const SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'en-IN';
+    recognition.continuous = true;   // 🔥 IMPORTANT
+    recognition.interimResults = false;
+
+    const synth = window.speechSynthesis;
+
+    let isListening = false;
+    let isSpeaking = false;
+
+    /* ================= SYSTEM PROMPT ================= */
+    function buildSystemPrompt(){
+      return `
+    You are a friendly AI language teacher.
+    Reply shortly.
+    Speak clearly.
+    Encourage conversation.
+    `;
+    }
+
+    /* ================= OPENAI ================= */
+    async function sendToAI(text){
+      if(isSpeaking) return;
+
+      status.innerText = "Thinking…";
+      aiText.innerText = "";
+
+      const res = await fetch("https://api.openai.com/v1/chat/completions",{
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json",
+          "Authorization":"Bearer ***REMOVED***l0EQoQCr4ZitnOqLTAd_FxPEttZlmhisk5_dxhys2P4OVSsA"
+        },
+        body:JSON.stringify({
+          model:"gpt-4o-mini",
+          messages:[
+            {role:"system",content:buildSystemPrompt()},
+            {role:"user",content:text}
+          ]
+        })
+      });
+
+      const data = await res.json();
+      const reply = data.choices[0].message.content;
+
+      aiText.innerText = reply;
+      speak(reply);
+    }
+
+    /* ================= TTS ================= */
+    function speak(text){
+      isSpeaking = true;
+      recognition.stop(); // 🔥 stop listening while AI speaks
+
+      const utter = new SpeechSynthesisUtterance(text);
+      utter.lang = 'en-IN';
+
+      utter.onend = () => {
+        isSpeaking = false;
+        startListening(); // 🔥 resume listening automatically
+      };
+
+      synth.speak(utter);
+    }
+
+    /* ================= LISTEN ================= */
+    function startListening(){
+      if(isListening) return;
+      try{
+        recognition.start();
+        isListening = true;
+        status.innerText = "Listening…";
+      }catch(e){}
+    }
+
+    recognition.onresult = e => {
+      const text = e.results[e.results.length - 1][0].transcript.trim();
+      if(!text) return;
+
+      status.innerText = text;
+      sendToAI(text);
+    };
+
+    recognition.onend = () => {
+      isListening = false;
+      if(!isSpeaking){
+        setTimeout(startListening,500); // 🔁 auto restart
+      }
+    };
+
+    recognition.onerror = () => {
+      isListening = false;
+      setTimeout(startListening,1000);
+    };
+
+    /* ================= AUTO START ================= */
+    window.addEventListener('click', () => {
+      startListening();
+    }, { once:true });
+
+    /* Try auto-start (may fail first time due to browser policy) */
+    setTimeout(startListening,1000);
+
+    /* ================= EXIT ================= */
+    function endChat(){
+      recognition.stop();
+      synth.cancel();
+      location.href='home.html';
+    }
+</script>
+
+</body>
+</html>

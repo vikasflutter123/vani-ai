@@ -1,0 +1,76 @@
+<link rel="stylesheet" href="style.css">
+
+<div class="lang-wrapper">
+    <div class="lang-card">
+        <h2>Choose Your Learning Language</h2>
+        <p>Select the language you want to learn and your native language</p>
+
+        <div class="select-group">
+            <label>I want to learn…</label>
+            <select id="learning">
+                <option value="">Select language</option>
+                <option>English</option>
+<!--                <option>Spanish</option>-->
+<!--                <option>French</option>-->
+<!--                <option>German</option>-->
+<!--                <option>Arabic</option>-->
+            </select>
+        </div>
+
+        <div class="select-group">
+            <label>My native language is…</label>
+            <select id="native">
+                <option value="">Select native language</option>
+<!--                <option>English</option>-->
+                <option>Hindi</option>
+<!--                <option>Spanish</option>-->
+<!--                <option>French</option>-->
+            </select>
+        </div>
+
+        <button onclick="saveLanguage()">Confirm</button>
+    </div>
+
+    <!-- Decorative language wheel -->
+    <div class="language-wheel">
+        <span class="lang en">EN</span>
+        <span class="lang es">ES</span>
+        <span class="lang fr">FR</span>
+        <span class="lang de">DE</span>
+        <span class="lang ar">AR</span>
+    </div>
+</div>
+
+<script>
+    function saveLanguage() {
+      const learningLang = document.getElementById('learning').value;
+      const nativeLang = document.getElementById('native').value;
+
+      if (!learningLang || !nativeLang) {
+        alert('Please select both languages');
+        return;
+      }
+
+      fetch('/api/auth/update-language', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': localStorage.getItem('token')
+        },
+        body: JSON.stringify({
+          learningLanguage: learningLang,
+          nativeLanguage: nativeLang
+        })
+      })
+      .then(res => res.json())
+      .then(() => {
+        // ✅ SAVE FOR QUICK TEST
+        localStorage.setItem('learningLanguage', learningLang);
+        localStorage.setItem('nativeLanguage', nativeLang);
+
+        // ✅ GO TO QUICK TEST (NOT HOME)
+        location.href = 'quick-test.html';
+      });
+    }
+</script>
+

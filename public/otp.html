@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify OTP - MyApp</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+          font-family: 'Inter', sans-serif;
+          min-height: 100vh;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background: linear-gradient(135deg, #6a11cb, #2575fc);
+        }
+
+        .card {
+          background: #fff;
+          width: 400px;
+          border-radius: 20px;
+          padding: 40px 30px;
+          box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+          text-align: center;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .card::before, .card::after {
+          content: '';
+          position: absolute;
+          border-radius: 50%;
+          z-index: 0;
+        }
+
+        .card::before {
+          width: 200px;
+          height: 200px;
+          background: rgba(255,106,136,0.2);
+          top: -80px;
+          right: -80px;
+        }
+
+        .card::after {
+          width: 150px;
+          height: 150px;
+          background: rgba(106,92,255,0.2);
+          bottom: -60px;
+          left: -60px;
+        }
+
+        h2 {
+          font-size: 24px;
+          color: #333;
+          margin-bottom: 8px;
+        }
+
+        p {
+          font-size: 14px;
+          color: #777;
+          margin-bottom: 25px;
+        }
+
+        /* --- OTP Box --- */
+        .otp-box {
+          display: flex;
+          justify-content: space-between;
+          gap: 10px;
+          margin-bottom: 25px;
+        }
+
+        .otp-box input {
+          width: 50px;
+          height: 60px;
+          font-size: 24px;
+          text-align: center;
+          border-radius: 12px;
+          border: 1px solid #ddd;
+          outline: none;
+          transition: 0.3s;
+        }
+
+        .otp-box input:focus {
+          border-color: #6a5cff;
+          box-shadow: 0 0 8px rgba(106,92,255,0.2);
+        }
+
+        button {
+          width: 100%;
+          padding: 16px;
+          border-radius: 14px;
+          border: none;
+          background: linear-gradient(135deg, #ff6a88, #6a5cff);
+          color: #fff;
+          font-size: 16px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: 0.3s;
+        }
+
+        button:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 20px rgba(106,92,255,0.3);
+        }
+
+        .demo-otp {
+          font-size: 12px;
+          color: #999;
+          margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Verify OTP</h2>
+    <p>Enter the 6-digit code</p>
+
+    <div class="otp-box">
+        <input maxlength="1">
+        <input maxlength="1">
+        <input maxlength="1">
+        <input maxlength="1">
+        <input maxlength="1">
+        <input maxlength="1">
+    </div>
+
+    <button id="verifyBtn">Verify</button>
+
+    <p class="demo-otp">
+        Demo OTP: <b>123456</b>
+    </p>
+</div>
+
+<script>
+    const inputs = document.querySelectorAll('.otp-box input');
+
+    inputs.forEach((input, index) => {
+      input.addEventListener('input', () => {
+        if (input.value && index < inputs.length - 1) {
+          inputs[index + 1].focus();
+        }
+      });
+
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !input.value && index > 0) {
+          inputs[index - 1].focus();
+        }
+      });
+    });
+
+    document.getElementById('verifyBtn').addEventListener('click', () => {
+      const otp = [...inputs].map(i => i.value).join('');
+      const phone = localStorage.getItem('phone');
+      const name = localStorage.getItem('name');
+      const flow = localStorage.getItem('flow');
+
+      if (!otp || otp.length !== 6) return alert('Enter valid OTP');
+      if (!phone) return alert('Phone missing');
+
+<!--      fetch('/api/auth/verify-otp', {-->
+<!--        method:'POST',-->
+<!--        headers:{'Content-Type':'application/json'},-->
+<!--        body: JSON.stringify({ otp, phone, name, flow })-->
+<!--      })-->
+<!--      .then(res => res.json())-->
+<!--      .then(data => {-->
+<!--         if (data.message) return alert(data.message);-->
+
+<!--             localStorage.setItem('token', data.token);-->
+<!--             localStorage.setItem('name', data.name);-->
+
+<!--        if (data.isNewUser === true) {-->
+<!--           // SIGNUP FLOW-->
+<!--           localStorage.setItem('onboarding', 'true');-->
+<!--           location.href = 'choose-language.html';-->
+<!--        } else {-->
+<!--         // LOGIN FLOW-->
+<!--           location.href = 'home.html';-->
+<!--        }-->
+<!--     });-->
+fetch('/api/auth/verify-otp', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ otp, phone, name, flow })
+})
+.then(async res => {
+  const data = await res.json();
+  if (!res.ok) throw data;
+  return data;
+})
+.then(data => {
+  localStorage.setItem('token', data.token);
+  localStorage.setItem('name', data.name);
+
+  if (data.isNewUser) {
+    localStorage.setItem('onboarding', 'true');
+    location.href = 'choose-language.html';
+  } else {
+    location.href = 'home.html';
+  }
+})
+.catch(err => {
+  console.error('OTP error:', err);
+  alert(err.message || 'OTP verification failed');
+});
+
+
+    });
+</script>
+
+</body>
+</html>

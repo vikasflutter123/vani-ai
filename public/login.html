@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - MyApp</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ---- RESET ---- */
+        *{margin:0;padding:0;box-sizing:border-box}
+
+        /* ---- BODY ---- */
+        body{
+          font-family:'Inter',sans-serif;
+          min-height:100vh;
+          display:flex;
+          justify-content:center;
+          align-items:center;
+          background:linear-gradient(135deg,#6a11cb,#2575fc);
+        }
+
+        /* ---- CARD ---- */
+        .card{
+          background:#fff;
+          width:400px;
+          border-radius:20px;
+          padding:40px 30px;
+          box-shadow:0 20px 60px rgba(0,0,0,.2);
+          text-align:center;
+          position:relative;
+          overflow:hidden;
+        }
+
+        /* ---- LOGO ---- */
+        .logo{
+          width:60px;height:60px;
+          background:linear-gradient(135deg,#ff6a88,#6a5cff);
+          color:#fff;
+          font-size:28px;font-weight:bold;
+          line-height:60px;
+          border-radius:50%;
+          margin:0 auto 20px;
+        }
+
+        /* ---- TEXT ---- */
+        h2{margin-bottom:25px;font-size:24px;color:#333}
+
+        /* ---- INPUT ---- */
+        input{
+          width:100%;
+          padding:14px 18px;
+          margin-bottom:20px;
+          border-radius:12px;
+          border:1px solid #ddd;
+          font-size:16px;
+          outline:none;
+        }
+        input:focus{
+          border-color:#6a5cff;
+          box-shadow:0 0 8px rgba(106,92,255,.2);
+        }
+
+        /* ---- PHONE ROW ---- */
+        .phone-row{
+          display:flex;
+          gap:10px;
+          margin-bottom:20px;
+        }
+
+        /* ---- COUNTRY PICKER ---- */
+        .country-picker{
+          position:relative;
+          width:90px;
+        }
+        .selected{
+          height:52px;
+          border:1px solid #ddd;
+          border-radius:12px;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          gap:6px;
+          font-weight:600;
+          cursor:pointer;
+        }
+        .dropdown{
+          position:absolute;
+          top:60px;
+          left:0;
+          width:240px;
+          background:#fff;
+          border-radius:14px;
+          box-shadow:0 15px 35px rgba(0,0,0,.15);
+          list-style:none;
+          padding:8px;
+          display:none;
+          max-height:220px;
+          overflow-y:auto;
+          z-index:100;
+        }
+        .dropdown li{
+          padding:10px 12px;
+          border-radius:10px;
+          display:flex;
+          justify-content:space-between;
+          cursor:pointer;
+        }
+        .dropdown li:hover{
+          background:#f2f4ff;
+        }
+
+        /* ---- BUTTON ---- */
+        button{
+          width:100%;
+          padding:16px;
+          border-radius:14px;
+          border:none;
+          background:linear-gradient(135deg,#ff6a88,#6a5cff);
+          color:#fff;
+          font-size:16px;
+          font-weight:600;
+          cursor:pointer;
+        }
+        button:hover{
+          transform:translateY(-2px);
+          box-shadow:0 8px 20px rgba(106,92,255,.3);
+        }
+
+        /* ---- SWITCH TEXT ---- */
+        .switch-text{
+          margin-top:20px;
+          font-size:14px;
+          color:#666;
+        }
+        .switch-text span{
+          color:#6a5cff;
+          font-weight:600;
+          cursor:pointer;
+        }
+
+        /* ---- DECORATION ---- */
+        .card::before,.card::after{
+          content:'';
+          position:absolute;
+          border-radius:50%;
+        }
+        .card::before{
+          width:200px;height:200px;
+          background:rgba(255,106,136,.2);
+          top:-80px;right:-80px;
+        }
+        .card::after{
+          width:150px;height:150px;
+          background:rgba(106,92,255,.2);
+          bottom:-60px;left:-60px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+    <div class="logo">U</div>
+    <h2>Welcome Back</h2>
+
+    <div class="phone-row">
+        <div class="country-picker" id="picker">
+            <div class="selected" id="selectedCode">
+                🇮🇳 <span>+91</span>
+            </div>
+            <ul class="dropdown" id="countryList">
+                <li data-code="+91" data-flag="🇮🇳">🇮🇳 India <b>+91</b></li>
+                <li data-code="+1" data-flag="🇺🇸">🇺🇸 USA <b>+1</b></li>
+                <li data-code="+44" data-flag="🇬🇧">🇬🇧 UK <b>+44</b></li>
+                <li data-code="+61" data-flag="🇦🇺">🇦🇺 Australia <b>+61</b></li>
+                <li data-code="+81" data-flag="🇯🇵">🇯🇵 Japan <b>+81</b></li>
+            </ul>
+        </div>
+
+        <input id="mobile" placeholder="Mobile number">
+    </div>
+
+    <button id="continueBtn">Continue</button>
+
+    <p class="switch-text">
+        New here? <span onclick="location.href='signup.html'">Create account</span>
+    </p>
+</div>
+
+<script>
+    let selectedCountryCode = '+91';
+
+    const picker = document.getElementById('picker');
+    const dropdown = document.getElementById('countryList');
+    const selected = document.getElementById('selectedCode');
+
+    picker.addEventListener('click',()=>{
+      dropdown.style.display =
+        dropdown.style.display === 'block' ? 'none' : 'block';
+    });
+
+    document.querySelectorAll('#countryList li').forEach(item=>{
+      item.addEventListener('click',()=>{
+        selectedCountryCode = item.dataset.code;
+        selected.innerHTML = `${item.dataset.flag} <span>${item.dataset.code}</span>`;
+        dropdown.style.display = 'none';
+      });
+    });
+
+    document.addEventListener('click',(e)=>{
+      if(!picker.contains(e.target)) dropdown.style.display='none';
+    });
+
+    /* SEND OTP */
+    document.getElementById('continueBtn').addEventListener('click',()=>{
+      const mobile = document.getElementById('mobile').value.trim();
+      if(!mobile) return alert('Mobile number required');
+
+      localStorage.setItem('phone',selectedCountryCode + mobile);
+      localStorage.setItem('flow','login');
+
+      fetch('/api/auth/send-otp',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          countryCode:selectedCountryCode,
+          mobile,
+          flow:'login'
+        })
+      })
+      .then(res=>res.json())
+      .then(data=>{
+        if(data.message?.includes('not registered')){
+          alert(data.message);
+          location.href='signup.html';
+          return;
+        }
+        location.href='otp.html';
+      });
+    });
+</script>
+
+</body>
+</html>
+

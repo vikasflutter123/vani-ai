@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Test</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family:'Inter',sans-serif; background: linear-gradient(135deg,#6a11cb,#2575fc); min-height:100vh; display:flex; justify-content:center; align-items:center; padding:20px;}
+        .card { background:#fff; width:100%; max-width:700px; border-radius:20px; padding:30px; box-shadow:0 20px 60px rgba(0,0,0,0.2);}
+        h2 { text-align:center; color:#333; margin-bottom:20px;}
+        .question { background: linear-gradient(135deg,#ff6a88,#6a5cff); padding:20px; border-radius:15px; margin-bottom:15px; color:#fff; transition: transform 0.2s;}
+        .question:hover { transform: scale(1.02);}
+        .question p { margin-bottom:10px; font-weight:600;}
+        .options label { display:block; background: rgba(255,255,255,0.1); padding:8px 12px; margin-bottom:8px; border-radius:10px; cursor:pointer; transition:0.2s;}
+        .options label:hover { background: rgba(255,255,255,0.2);}
+        .options input[type="radio"] { margin-right:10px;}
+        button { display:block; margin:20px auto 0; padding:15px 30px; font-size:16px; font-weight:600; color:#fff; background:linear-gradient(135deg,#ff6a88,#6a5cff); border:none; border-radius:15px; cursor:pointer; transition:0.3s;}
+        button:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(106,92,255,0.3);}
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Quick Test</h2>
+    <div id="questions">Loading questions...</div>
+    <button onclick="submitTest()">Submit</button>
+</div>
+
+<script>
+    const isRetake = localStorage.getItem('retake') === 'true';
+
+    const token = localStorage.getItem('token');
+    const learningLanguage = localStorage.getItem('learningLanguage');
+    const nativeLanguage = localStorage.getItem('nativeLanguage');
+    let questions = [];
+
+    if (!token || !learningLanguage || !nativeLanguage) {
+      alert('Missing info. Please login again.');
+      location.href = 'login.html';
+    }
+
+    fetch(`/api/auth/assessment/questions?learningLanguage=${learningLanguage}&nativeLanguage=${nativeLanguage}`, {
+  headers: { 'Authorization': `Bearer ${token}` } // ✅ correct
+})
+
+
+    .then(res => res.ok ? res.json() : Promise.reject('Failed to fetch questions'))
+    .then(data => { questions = data; renderQuestions(); })
+    .catch(err => {
+      console.error(err);
+      document.getElementById('questions').innerHTML = '<p style="color:red;text-align:center;">Failed to load questions.</p>';
+    });
+
+    function renderQuestions() {
+      const container = document.getElementById('questions');
+      container.innerHTML = '';
+      questions.forEach((q,i) => {
+        let opts = typeof q.options==='string'?JSON.parse(q.options):q.options;
+        const div = document.createElement('div');
+        div.className='question';
+        let html = `<p>${i+1}. ${q.question}</p><div class="options">`;
+        Object.keys(opts).forEach(k=>{
+          html+=`<label><input type="radio" name="q${q.id}" value="${k}">${opts[k]}</label>`;
+        });
+        html+='</div>';
+        div.innerHTML = html;
+        container.appendChild(div);
+      });
+    }
+
+  function submitTest() {
+  const answers = [];
+
+  questions.forEach(q=>{
+    const selected = document.querySelector(`input[name="q${q.id}"]:checked`);
+    if(selected) answers.push({questionId:q.id, selected:selected.value});
+  });
+
+  if(answers.length !== questions.length){
+    alert('Please answer all questions');
+    return;
+  }
+
+  fetch('/api/auth/assessment/submit', {
+    method:'POST',
+    headers:{
+      'Content-Type':'application/json',
+      'Authorization':`Bearer ${token}`
+    },
+    body:JSON.stringify({
+      answers,
+      retake: isRetake // ✅ backend can overwrite previous assessment
+    })
+  })
+  .then(res=>res.json())
+  .then(result=>{
+    localStorage.removeItem('retake');
+    localStorage.setItem('result',JSON.stringify(result));
+    location.href='analysis.html';
+  })
+  .catch(()=>{
+    alert('Failed to submit test');
+  });
+}
+
+
+</script>
+</body>
+</html>
