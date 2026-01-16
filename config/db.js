@@ -4,7 +4,7 @@
 //
 //module.exports = { users, posts };
 
-const { Pool } = require('pg');
+/*const { Pool } = require('pg');
 require('dotenv').config();
 
 const pool = new Pool({
@@ -23,6 +23,27 @@ pool.query('SELECT NOW()', (err, res) => {
     console.log('✅ Database connected successfully');
   }
 });
+
+module.exports = pool;*/
+
+const { Pool } = require('pg');
+require('dotenv').config();
+
+const pool = new Pool({
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  database: process.env.DB_NAME,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  ssl: {
+    rejectUnauthorized: false
+  }
+});
+
+// Test connection
+pool.query('SELECT NOW()')
+  .then(() => console.log('✅ Supabase DB connected'))
+  .catch(err => console.error('❌ DB error:', err.message));
 
 module.exports = pool;
 //const { Pool } = require('pg');
